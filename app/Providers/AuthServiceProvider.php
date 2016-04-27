@@ -26,6 +26,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
-        //
+        $gate->define('is-blocked', function ($user) {
+            return $user->status == 1;
+        });
     }
 }

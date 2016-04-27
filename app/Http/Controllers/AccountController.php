@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\User;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 use App\Services\Lecloud;
@@ -30,7 +31,8 @@ class AccountController extends Controller
      */
     public function getIndex(){
         view()->share('livestatus',$this->getLivestatus());
-        if(!$this->isBlocked()){
+
+        if (Gate::denies('is-blocked')) {
             return view('account.config.blocked');
         }
 
@@ -38,7 +40,7 @@ class AccountController extends Controller
     }
 
     public function getCreate(){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         view()->share('livestatus',$this->getLivestatus());
@@ -49,7 +51,7 @@ class AccountController extends Controller
     }
 
     public function postCreate(Request $request){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         if($this->getLivestatus()){
@@ -87,7 +89,7 @@ class AccountController extends Controller
     }
 
     public function getStop(){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         view()->share('livestatus',$this->getLivestatus());
@@ -98,7 +100,7 @@ class AccountController extends Controller
     }
 
     public function postStop(){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         if(!$this->getLivestatus()){
@@ -116,7 +118,7 @@ class AccountController extends Controller
     }
 
     public function getInfo(){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         view()->share('livestatus',$this->getLivestatus());
@@ -140,10 +142,10 @@ class AccountController extends Controller
     }
 
     public function getCover(){
-        view()->share('livestatus',$this->getLivestatus());
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
+        view()->share('livestatus',$this->getLivestatus());
         $uid = Auth::user()->id;
 
         if(Cover::where('uid',$uid)->count()){
@@ -159,7 +161,7 @@ class AccountController extends Controller
     }
 
     public function postCover(Request $request){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         $uid = Auth::user()->id;
@@ -203,7 +205,7 @@ class AccountController extends Controller
     }
 
     public function getUsername(){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         view()->share('livestatus',$this->getLivestatus());
@@ -211,7 +213,7 @@ class AccountController extends Controller
     }
 
     public function postUsername(Request $request){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         $uid = Auth::user()->id;
@@ -227,7 +229,7 @@ class AccountController extends Controller
     }
 
     public function getEmail(){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         view()->share('livestatus',$this->getLivestatus());
@@ -235,7 +237,7 @@ class AccountController extends Controller
     }
 
     public function postEmail(Request $request){
-        if(!$this->isBlocked()){
+        if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         $uid = Auth::user()->id;
@@ -251,9 +253,10 @@ class AccountController extends Controller
         }
     }
 
-    public function isBlocked(){
-        $result = \App\Models\User::select('status')->where('id',Auth::user()->id)->first();
-        $blockStatus = $result->status;
-        return $blockStatus;
+    public function getPlayInfo(){
+        if (Gate::denies('is-blocked')) {
+            return redirect()->to('account');
+        }
+        view()->share('livestatus',$this->getLivestatus());
     }
 }
