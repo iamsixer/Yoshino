@@ -59,6 +59,7 @@ Route::group(['middleware' => ['web'],'prefix'=>'account'], function () {
     Route::get('email','AccountController@getEmail');
     Route::post('email','AccountController@postEmail');
     Route::get('info','AccountController@getInfo');
+    Route::get('playinfo','AccountController@getPlayInfo');
 });
 
 //后台认证路由

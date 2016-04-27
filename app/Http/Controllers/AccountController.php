@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Models\Playinfo;
 use App\User;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
-use App\Services\Lecloud;
+use App\Facades\Lecloud;
 use App\Models\Liveinfo;
 use App\Models\Cover;
 use Illuminate\Support\Facades\DB;
@@ -80,6 +82,13 @@ class AccountController extends Controller
             $Liveinfo->description = $request->input('livedes') ? $request->input('livedes') : '暂无简介';
             $Liveinfo->activityId = $activityId;
             if($Liveinfo->save()){
+                if($config['record']){
+                    $Playinfo = new Playinfo();
+                    $Playinfo->uid = Auth::user()->id;
+                    $Playinfo->activityId = $activityId;
+                    $Playinfo->ctime = time();
+                    $Playinfo->save();
+                }
                 return redirect()->to('/account/info');
             }else{
                 return redirect()->to('/account/create');
@@ -253,10 +262,62 @@ class AccountController extends Controller
         }
     }
 
-    public function getPlayInfo(){
+    public function getPlayInfo(Request $request){
         if (Gate::denies('is-blocked')) {
             return redirect()->to('account');
         }
         view()->share('livestatus',$this->getLivestatus());
+        $uid = Auth::user()->id;
+        if($request->get('id')) {
+            $playInfoId = $request->get('id');
+            $playInfo = Playinfo::select('uid','activityId','ctime','videoId','videoUnique')->where('id',$playInfoId)->first();
+            if((!$playInfo) || Gate::denies('is-user-playinfo',$playInfo)){
+                return redirect()->to('account/playinfo');
+            }
+            if(!$playInfo['videoId']){
+                $json = Lecloud::getPlayInfo($playInfo['activityId']);
+                $arr = json_decode($json,true);
+                if($arr['machineInfo']){
+                    Playinfo::where('id',$playInfoId)->update([
+                        'videoId' => $arr['machineInfo'][0]['videoId'],
+                        'videoUnique' => $arr['machineInfo'][0]['videoUnique']
+                    ]);
+                    $uu = Lecloud::getUU();
+                    return view('account.config.playvideo',[
+                        'info' => '',
+                        'uu' => $uu,
+                        'videoUnique' => $arr['machineInfo'][0]['videoUnique']
+                    ]);
+                }else{
+                    if((time()-$playInfo['ctime'])>86400){
+                        Playinfo::where('id',$playInfoId)->delete();
+                        return redirect()->to('account/playinfo');
+                    }else{
+                        return view('account.config.playvideo',[
+                            'info' => '视频还在录制或者转码中'
+                        ]);
+                    }
+                }
+            }else{
+                $uu = Lecloud::getUU();
+                return view('account.config.playvideo',[
+                    'info' => '',
+                    'uu' => $uu,
+                    'videoUnique' => $playInfo['videoUnique']
+                ]);
+            }
+        }else{
+            $playInfoList = Playinfo::select('id', 'activityId', 'ctime')->where('uid', $uid)->get();
+            $playInfo = [];
+            foreach ($playInfoList as $value) {
+                $arr['id'] = $value['id'];
+                $arr['activityId'] = $value['activityId'];
+                $arr['ctime'] = date('Y-m-d H:i:s', $value['ctime']);
+                array_push($playInfo, $arr);
+            }
+            return view('account.config.playinfo',[
+                'playInfo' => $playInfo
+            ]);
+        }
     }
 }

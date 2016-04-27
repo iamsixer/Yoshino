@@ -12,7 +12,8 @@ namespace App\Services;
 class Lecloud
 {
     protected static $secretkey = '';
-    protected static $userId='';
+    protected static $userId = '';
+    public static $uu = '';
     protected static $url = 'http://api.open.letvcloud.com/live/execute';
 
     protected static function request($url,$data=null){
@@ -56,6 +57,7 @@ class Lecloud
         $result = self::request(self::$url,$data);
         return $result;
     }
+
     //停止活动
     public static function stopActivity($activityId){
         $parameter = array(
@@ -72,6 +74,7 @@ class Lecloud
         self::request(self::$url,$data);
         return true;
     }
+
     //查询活动
     public static function queryActivity($activityId){
         $parameter = array(
@@ -88,6 +91,7 @@ class Lecloud
         }else
             return false;
     }
+
     //获取推流地址
     public static function getPushUrl($activityId){
         $parameter = array(
@@ -102,11 +106,28 @@ class Lecloud
         $data = http_build_query($parameter);
         return self::request(self::$url.'?'.$data);
     }
+
+    //获取视频录制信息
+    public static function getPlayInfo($activityId){
+        $parameter = array(
+            'method' => 'letv.cloudlive.activity.getPlayInfo',
+            'ver' => '3.0',
+            'userid' => self::$userId,
+            'timestamp' => self::getTimeStamp(),
+            'activityId' => $activityId
+        );
+
+        $parameter['sign'] = self::getSign($parameter);
+        $data = http_build_query($parameter);
+        return self::request(self::$url.'?'.$data);
+    }
+
     //获取时间戳
     private static function getTimeStamp(){
         $time = getdate();
         return $time['0'].'000';
     }
+
     //传入数组获取sign值
     private static function getSign($array){
         ksort($array);
@@ -117,5 +138,9 @@ class Lecloud
         }
         $signstr .= self::$secretkey;
         return md5($signstr);
+    }
+
+    public function getUU(){
+        return self::$uu;
     }
 }

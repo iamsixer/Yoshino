@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use App\Models\Liveinfo;
-use App\Services\Leancloud;
+use App\Facades\Leancloud;
 use App\Models\Cover;
 use App\Models\Danmaku;
 

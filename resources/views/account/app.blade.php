@@ -36,6 +36,13 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="mdl-data-table__cell--non-numeric">视频录制</td>
+                        <td class="mdl-data-table__cell--non-numeric">查看已录制视频</td>
+                        <td>
+                            <a href="{{ url('/account/playinfo') }}">查看</a>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="mdl-data-table__cell--non-numeric">直播状态</td>
                         @if(!$livestatus)
                             <td class="mdl-data-table__cell--non-numeric">未开始</td>

@@ -29,5 +29,9 @@ class AuthServiceProvider extends ServiceProvider
         $gate->define('is-blocked', function ($user) {
             return $user->status == 1;
         });
+
+        $gate->define('is-user-playinfo',function($user,$playInfo){
+            return $user->id === $playInfo->uid;
+        });
     }
 }
