@@ -26,7 +26,7 @@
         @else
             <div class="mdl-cell mdl-cell--12-col live-info" style="text-align: center;">
                 <h4 style="margin:10px 0 40px;">没有人在直播哦</h4>
-                <img style="border-radius: 100%;padding: 5px;border:solid #D5D5D5;" src="http://ww2.sinaimg.cn/large/a15b4afegw1f227ysfraeg2083066ar9.jpg">
+                <img style="border-radius: 100%;padding: 5px;border:solid #D5D5D5;" src="//s-img.niconico.in/large/a15b4afegw1f227ysfraeg2083066ar9.jpg">
             </div>
         @endif
     </div>

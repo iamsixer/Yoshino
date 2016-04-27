@@ -9,7 +9,7 @@
                 </div>
                 <form method="POST" action="{{ url('/admin/register') }}">
                     <div class="mdl-card__supporting-text login-info">
-                        <img src="http://ww2.sinaimg.cn/large/a15b4afegw1f1wosd1qvqg20360340sp.jpg" class="login-image mdl-layout--large-screen-only">
+                        <img src="//s-img.niconico.in/large/a15b4afegw1f1wosd1qvqg20360340sp.jpg" class="login-image mdl-layout--large-screen-only">
                         {!! csrf_field() !!}
                         <div class="mdl-textfield mdl-js-textfield login-input">
                             <input class="mdl-textfield__input" type="text" id="name" name="name" value="{{ old('name') }}" required>
