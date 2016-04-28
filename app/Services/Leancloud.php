@@ -9,9 +9,15 @@ namespace App\Services;
 
 class Leancloud
 {
-    public static $appId = '';
-    protected static $appKey = '';
+    public static $appId;
+    protected static $appKey;
     protected static $url = 'https://api.leancloud.cn/1.1/classes/_Conversation';
+
+    public function __construct($appId,$appKey)
+    {
+        self::$appId = $appId;
+        self::$appKey = $appKey;
+    }
 
     protected static function request($url,$data=null){
         $ch = curl_init();

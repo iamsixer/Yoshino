@@ -11,10 +11,17 @@ namespace App\Services;
 
 class Lecloud
 {
-    protected static $secretkey = '';
-    protected static $userId = '';
-    public static $uu = '';
+    protected static $secretkey;
+    protected static $userId;
+    protected static $uu;
     protected static $url = 'http://api.open.letvcloud.com/live/execute';
+
+    public function __construct($sceretkey,$userId,$uu)
+    {
+        self::$secretkey = $sceretkey;
+        self::$userId = $userId;
+        self::$uu = $uu;
+    }
 
     protected static function request($url,$data=null){
         $ch = curl_init();

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 
 class LeancloudServiceProvider extends ServiceProvider
@@ -24,7 +25,10 @@ class LeancloudServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('LeancloudService', function () {
-            return new \App\Services\Leancloud();
+            return new \App\Services\Leancloud(
+                Config::get('leancloud.appId'),
+                Config::get('leancloud.appKey')
+            );
         });
     }
 }

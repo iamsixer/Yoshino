@@ -204,8 +204,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
 
-        'Lecloud'   => App\Facades\LecloudFacade::class,
-        'Leancloud' => App\Facades\LeancloudFacade::class,
+        'Lecloud'   => App\Facades\Lecloud::class,
+        'Leancloud' => App\Facades\Leancloud::class,
 
     ],
 
