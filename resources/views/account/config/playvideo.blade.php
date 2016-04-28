@@ -8,7 +8,7 @@
         @if($info)
             <h5 style="margin:60px 0;">{{ $info }}</h5>
         @elseif($videoUnique)
-            <div id="recordVideo" style="height: 500px;"></div>
+            <div id="playcard"></div>
         @endif
     </div>
     <div class="mdl-card__supporting-text" style="text-align: center;width: auto;">
@@ -23,7 +23,13 @@
     <script src="{{ url('js/bcloud.js') }}"></script>
     <script>
         var player = new CloudVodPlayer();
-        player.init({uu:"{{ $uu }}",vu:"{{ $videoUnique }}"},'recordVideo');
+        player.init({uu:"{{ $uu }}",vu:"{{ $videoUnique }}"},'playcard');
+        $(document).ready(function(){
+            $("#playcard").css("height",$("#playcard").width()*0.5625+"px");
+            $(window).resize(function(){
+                $("#playcard").css("height",$("#playcard").width()*0.5625+"px");
+            });
+        });
     </script>
     @endif
 @endsection
