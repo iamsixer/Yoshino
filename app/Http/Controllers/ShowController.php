@@ -63,7 +63,7 @@ class ShowController extends Controller
         $name = $userinfo->name;
         $activityId = $showinfo->activityId;
         $email = $userinfo->email;
-        $appId = Leancloud::$appId;
+        $appId = Leancloud::getAppId();
 
 
         return view('show',[

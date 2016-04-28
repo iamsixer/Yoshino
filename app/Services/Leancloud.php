@@ -9,7 +9,7 @@ namespace App\Services;
 
 class Leancloud
 {
-    public static $appId;
+    protected static $appId;
     protected static $appKey;
     protected static $url = 'https://api.leancloud.cn/1.1/classes/_Conversation';
 
@@ -48,5 +48,9 @@ class Leancloud
         $data = json_encode($info,JSON_UNESCAPED_UNICODE);
         $result = self::request(self::$url,$data);
         return $result;
+    }
+
+    public function getAppId(){
+        return self::$appId;
     }
 }

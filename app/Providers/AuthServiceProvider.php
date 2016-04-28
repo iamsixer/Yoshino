@@ -31,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         $gate->define('is-user-playinfo',function($user,$playInfo){
-            return $user->id === $playInfo->uid;
+            return $user->id == $playInfo->uid;
         });
     }
 }

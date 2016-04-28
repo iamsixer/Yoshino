@@ -20,7 +20,7 @@
 
 @section('js')
     @if($videoUnique)
-    <script src="http://yuntv.letv.com/player/vod/bcloud.js"></script>
+    <script src="{{ url('js/bcloud.js') }}"></script>
     <script>
         var player = new CloudVodPlayer();
         player.init({uu:"{{ $uu }}",vu:"{{ $videoUnique }}"},'recordVideo');

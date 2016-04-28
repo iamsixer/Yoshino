@@ -294,7 +294,8 @@ class AccountController extends Controller
                         return redirect()->to('account/playinfo');
                     }else{
                         return view('account.config.playvideo',[
-                            'info' => '视频还在录制或者转码中'
+                            'info' => '视频还在录制或者转码中',
+                            'videoUnique'=>''
                         ]);
                     }
                 }
