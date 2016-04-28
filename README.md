@@ -58,6 +58,15 @@ MAIL_ENCRYPTION=null
 
 //后台邀请码
 INVITECODE=example
+
+//乐视配置文件
+SECRETKEY=
+USERID=
+UU=
+
+//Leancloud配置文件
+APPID=
+APPKEY=
 ```
 之后执行
 ```
@@ -96,12 +105,6 @@ chmod -R 775 /var/www/laravel/storage
 
 管理员注册链接: 域名/admin/register
 
-这两个是申请完乐视和leancloud得到API KEY、Secret后填写。
-```
-Lelive/app/Services/Leancloud.php
-Lelive/app/Services/Lecloud.php
-```
-
 nginx.conf
 ```
 server {
@@ -128,9 +131,9 @@ server {
 
 ## Todo
 
-- [ ] 弹幕重复bug修复
+- [x] 弹幕重复bug修复
+- [x] 直播录制视频观看
 - [ ] 游客ID区分
-- [ ] 直播录制视频观看
 - [ ] 直播期间允许修改标题和简介
 
 ## LICENSE
