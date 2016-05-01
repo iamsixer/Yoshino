@@ -80,3 +80,16 @@ Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
     Route::post('users/{id}/unblock','AdminController@postUnblockUser');
     Route::get('playinfo','AdminController@getPlayInfo');
 });
+
+//API
+Route::group(['middleware' => ['web'],'prefix'=>'api'], function () {
+    //需登录认证API
+    Route::group(['middleware' => ['web'],'prefix'=>'user'], function () {
+        Route::auth();
+        Route::get('getinfo','Api\UserController@getInfo');
+    });
+    //无需登录API
+    Route::group(['middleware' => ['web']], function () {
+        //
+    });
+});

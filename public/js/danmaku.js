@@ -17,6 +17,18 @@ bindEvent(document.body, 'keydown', function(e) {
     }
 });
 
+$.ajax({
+    type: 'GET',
+    url: '../api/user/getinfo?type=name',
+    dataType: 'json',
+    cache: false,
+    success:function (data) {
+        if(data.name){
+            clientId = data.name;
+        }
+    }
+});
+
 function bindEvent(dom, eventName, fun) {
     if (window.addEventListener) {
         dom.addEventListener(eventName, fun);
