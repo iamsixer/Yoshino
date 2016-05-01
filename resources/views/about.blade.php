@@ -9,6 +9,7 @@
             <h6><a href="https://github.com/volio/Lelive" target="_blank">https://github.com/volio/Lelive</a></h6>
             <h6>仅供学习交流使用</h6>
             <h6>请勿用于商业用途</h6>
+            <h6>感谢我的朋友们在开发过程中提供的帮助</h6>
             <h6>© 2016 <a href="https://niconiconi.org" target="_blank">Volio</a> All right reserved</h6>
         </div>
     </div>
