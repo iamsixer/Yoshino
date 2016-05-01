@@ -61,6 +61,6 @@
     <script>
         var player = new CloudLivePlayer();
         player.init({activityId:"{{ $activityId }}"},'player');
-        main('{{ $appId }}','{{ $roomId }}');
+        danmakuInit('{{ $appId }}','{{ $roomId }}');
     </script>
 @endsection

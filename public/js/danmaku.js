@@ -1,7 +1,6 @@
 /**
  * Created by Volio on 2016/3/13.
  */
-var clientId = '游客';
 var firstFlag = true;
 var rt;
 var room;
@@ -17,17 +16,25 @@ bindEvent(document.body, 'keydown', function(e) {
     }
 });
 
-$.ajax({
-    type: 'GET',
-    url: '../api/user/getinfo?type=name',
-    dataType: 'json',
-    cache: false,
-    success:function (data) {
-        if(data.name){
-            clientId = data.name;
+function danmakuInit(appId,roomId) {
+    var clientId = '游客';
+    
+    $.ajax({
+        type: 'GET',
+        url: '../api/user/getinfo?type=name',
+        dataType: 'json',
+        cache: false,
+        success:function (data) {
+            if(data.name){
+                clientId = data.name;
+            }
+            main(appId,roomId,clientId);
+        },
+        error:function () {
+            main(appId,roomId,clientId);
         }
-    }
-});
+    });
+}
 
 function bindEvent(dom, eventName, fun) {
     if (window.addEventListener) {
@@ -37,7 +44,7 @@ function bindEvent(dom, eventName, fun) {
     }
 }
 
-function main(appId,roomId){
+function main(appId,roomId,clientId){
     printWall.innerHTML = null;
     showMessage('系统','正在连接弹幕服务器...');
     if (!firstFlag) {
