@@ -215,17 +215,11 @@ class AccountController extends Controller
     }
 
     public function getUsername(){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
         view()->share('livestatus',$this->getLivestatus());
         return view('account.config.username');
     }
 
     public function postUsername(Request $request){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
         $uid = Auth::user()->id;
         $username = $request->input('newUsername');
         if(strlen($username)>4){
@@ -309,7 +303,7 @@ class AccountController extends Controller
                 ]);
             }
         }else{
-            $playInfoList = Playinfo::select('id', 'activityId', 'ctime')->where('uid', $uid)->get();
+            $playInfoList = Playinfo::select('id', 'activityId', 'ctime')->where('uid', $uid)->orderBy('id', 'desc')->paginate(20);
             $playInfo = [];
             foreach ($playInfoList as $value) {
                 $arr['id'] = $value['id'];
@@ -317,8 +311,14 @@ class AccountController extends Controller
                 $arr['ctime'] = date('Y-m-d H:i:s', $value['ctime']);
                 array_push($playInfo, $arr);
             }
+
+            $previousPageUrl = $playInfoList->previousPageUrl();
+            $nextPageUrl = $playInfoList->nextPageUrl();
+
             return view('account.config.playinfo',[
-                'playInfo' => $playInfo
+                'playInfo' => $playInfo,
+                'previousPageUrl' => $previousPageUrl,
+                'nextPageUrl' => $nextPageUrl
             ]);
         }
     }
