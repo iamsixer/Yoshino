@@ -35,6 +35,13 @@
                             <a href="{{ url('/admin/blocked') }}">管理</a>
                         </td>
                     </tr>
+                    <tr>
+                        <td class="mdl-data-table__cell--non-numeric">已录制视频信息</td>
+                        <td class="mdl-data-table__cell--non-numeric"></td>
+                        <td>
+                            <a href="{{ url('/admin/playinfo') }}">管理</a>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

@@ -78,4 +78,5 @@ Route::group(['middleware' => ['web'],'prefix'=>'admin'], function () {
     Route::post('users/{id}/block','AdminController@postBlockUser');
     Route::get('blocked','AdminController@getBlockedUsers');
     Route::post('users/{id}/unblock','AdminController@postUnblockUser');
+    Route::get('playinfo','AdminController@getPlayInfo');
 });

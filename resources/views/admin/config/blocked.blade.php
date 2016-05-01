@@ -39,7 +39,7 @@
         @endif
     </div>
     <div class="mdl-card__supporting-text" style="text-align: center;width: auto;">
-        @if($users_info)
+        @if($users_info&&($previousPageUrl||$nextPageUrl))
             @if($previousPageUrl)
                 <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" href="{{ $previousPageUrl }}">
                     上一页

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Lecloud;
+use App\Models\Playinfo;
+use App\Facades\Lecloud;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -30,17 +31,15 @@ class AdminController extends Controller
     }
 
     public function getActivity(){
-        $act_count = Liveinfo::count();
         $livingUser = Liveinfo::select('id','uid','title','activityId')->get();
-
         $livingInfo = [];
 
         foreach ($livingUser as $user){
-            $act_count--;
-            $livingInfo[$act_count]['id'] = $user['id'];
-            $livingInfo[$act_count]['uid'] = $user['uid'];
-            $livingInfo[$act_count]['title'] = $user['title'];
-            $livingInfo[$act_count]['activityId'] = $user['activityId'];
+            $arr['id'] = $user['id'];
+            $arr['uid'] = $user['uid'];
+            $arr['title'] = $user['title'];
+            $arr['activityId'] = $user['activityId'];
+            array_push($livingInfo,$arr);
         }
 
         return view('admin.config.activity',[
@@ -133,5 +132,67 @@ class AdminController extends Controller
     public function postUnblockUser($id){
         User::where('id',$id)->update(['status'=>1]);
         return redirect()->to('admin/blocked');
+    }
+
+    public function getPlayInfo(Request $request){
+        if($request->get('id')) {
+            $playInfoId = $request->get('id');
+            $playInfo = Playinfo::select('uid','activityId','ctime','videoId','videoUnique')->where('id',$playInfoId)->first();
+            if(!$playInfo){
+                return redirect()->to('admin/playinfo');
+            }
+            if(!$playInfo['videoId']){
+                $json = Lecloud::getPlayInfo($playInfo['activityId']);
+                $arr = json_decode($json,true);
+                if($arr['machineInfo']){
+                    Playinfo::where('id',$playInfoId)->update([
+                        'videoId' => $arr['machineInfo'][0]['videoId'],
+                        'videoUnique' => $arr['machineInfo'][0]['videoUnique']
+                    ]);
+                    $uu = Lecloud::getUU();
+                    return view('admin.config.playvideo',[
+                        'info' => '',
+                        'uu' => $uu,
+                        'videoUnique' => $arr['machineInfo'][0]['videoUnique']
+                    ]);
+                }else{
+                    if((time()-$playInfo['ctime'])>86400){
+                        Playinfo::where('id',$playInfoId)->delete();
+                        return redirect()->to('admin/playinfo');
+                    }else{
+                        return view('admin.config.playvideo',[
+                            'info' => '视频还在录制或者转码中',
+                            'videoUnique'=>''
+                        ]);
+                    }
+                }
+            }else{
+                $uu = Lecloud::getUU();
+                return view('admin.config.playvideo',[
+                    'info' => '',
+                    'uu' => $uu,
+                    'videoUnique' => $playInfo['videoUnique']
+                ]);
+            }
+        }else {
+            $playInfoList = Playinfo::select('id', 'uid', 'activityId', 'ctime')->orderBy('id', 'desc')->paginate(30);
+            $playInfo = [];
+            foreach ($playInfoList as $value) {
+                $arr['id'] = $value['id'];
+                $arr['uid'] = $value['uid'];
+                $arr['activityId'] = $value['activityId'];
+                $arr['ctime'] = date('Y-m-d H:i:s', $value['ctime']);
+                array_push($playInfo, $arr);
+            }
+
+            $previousPageUrl = $playInfoList->previousPageUrl();
+            $nextPageUrl = $playInfoList->nextPageUrl();
+
+            return view('admin.config.playinfo', [
+                'playInfo' => $playInfo,
+                'previousPageUrl' => $previousPageUrl,
+                'nextPageUrl' => $nextPageUrl
+            ]);
+        }
     }
 }
