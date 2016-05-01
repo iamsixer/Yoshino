@@ -17,22 +17,18 @@ class ShowController extends Controller
     }
 
     public function index(){
-        $count = $livecount = Liveinfo::where('ctime','>',time()-43200)->count();
-
-        if($count){
-            $livingUser = Liveinfo::select('uid','title','description')->where('ctime','>',time()-43200)->get();
-            foreach ($livingUser as $user){
-                $count--;
-                $livingInfo[$count]['uid'] = $user['uid'];
-                $livingInfo[$count]['title'] = $user['title'];
-                $livingInfo[$count]['description'] = $user['description'];
-                $userCover = Cover::select('cover')->where('uid',$user['uid'])->first();
-                $livingInfo[$count]['cover'] = $userCover['cover'];
-            }
-            ksort($livingInfo);
-        }else{
-            $livingInfo = array();
+        $livingInfo = [];
+        $livingUser = Liveinfo::select('uid','title','description')->where('ctime','>',time()-43200)->orderBy('id', 'desc')->get();
+        foreach ($livingUser as $user){
+            $arr['uid'] = $user['uid'];
+            $arr['title'] = $user['title'];
+            $arr['description'] = $user['description'];
+            $userCover = Cover::select('cover')->where('uid',$user['uid'])->first();
+            $arr['cover'] = $userCover['cover'];
+            array_push($livingInfo,$arr);
         }
+
+        $livecount = count($livingInfo);
 
         return view('index',[
             'count' => $livecount,
