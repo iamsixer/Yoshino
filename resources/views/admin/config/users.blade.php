@@ -39,8 +39,21 @@
         @endif
     </div>
     <div class="mdl-card__supporting-text" style="text-align: center;width: auto;">
-        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" href="{{ url('/admin') }}">
-            返回
-        </a>
+        @if($users_info)
+            @if($previousPageUrl)
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" href="{{ $previousPageUrl }}">
+                上一页
+            </a>
+            @endif
+            @if($nextPageUrl)
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" href="{{ $nextPageUrl }}">
+                下一页
+            </a>
+            @endif
+        @else
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" href="{{ url('/admin') }}">
+                返回
+            </a>
+        @endif
     </div>
 @endsection

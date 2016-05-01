@@ -84,7 +84,7 @@ class AdminController extends Controller
     }
 
     public function getUsers(){
-        $users = User::select('id','name','email')->where('status','1')->get();
+        $users = User::select('id','name','email')->where('status','1')->orderBy('id', 'desc')->simplePaginate(30);
 
         $all_user_info = [];
         foreach ($users as $user){
@@ -94,8 +94,13 @@ class AdminController extends Controller
             array_push($all_user_info,$user_info);
         }
 
+        $previousPageUrl = $users->previousPageUrl();
+        $nextPageUrl = $users->nextPageUrl();
+
         return view('admin.config.users',[
             'users_info' => $all_user_info,
+            'previousPageUrl' => $previousPageUrl,
+            'nextPageUrl' => $nextPageUrl
         ]);
     }
 
@@ -105,7 +110,7 @@ class AdminController extends Controller
     }
 
     public function getBlockedUsers(){
-        $users = User::select('id','name','email')->where('status','0')->get();
+        $users = User::select('id','name','email')->where('status','0')->orderBy('id', 'desc')->paginate(30);
 
         $all_user_info = [];
         foreach ($users as $user){
@@ -115,8 +120,13 @@ class AdminController extends Controller
             array_push($all_user_info,$user_info);
         }
 
+        $previousPageUrl = $users->previousPageUrl();
+        $nextPageUrl = $users->nextPageUrl();
+
         return view('admin.config.blocked',[
             'users_info' => $all_user_info,
+            'previousPageUrl' => $previousPageUrl,
+            'nextPageUrl' => $nextPageUrl
         ]);
     }
 
