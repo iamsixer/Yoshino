@@ -12,8 +12,8 @@
                             <h5 class="show-title">主播：{{ $name }}</h5>
                         </div>
                     </div>
-                    <div class="mdl-layout-spacer"></div>
-                    <div class="mdl-card live-info">
+                    <div class="mdl-layout-spacer  mdl-layout--large-screen-only"></div>
+                    <div class="mdl-card live-info  mdl-layout--large-screen-only">
                         <div class="mdl-card__supporting-text">
                             <h5 class="show-title">简介：</h5>
                             <h6 class="show-title">{{ $description }}</h6>
