@@ -22,7 +22,7 @@
                     <td class="mdl-data-table__cell--non-numeric">新邮箱</td>
                     <td class="mdl-data-table__cell--non-numeric">
                         <div class="mdl-textfield mdl-js-textfield">
-                            <input class="mdl-textfield__input" type="email" id="newEmail" name="newEmail" required>
+                            <input class="mdl-textfield__input" type="email" id="newEmail" name="email" required>
                             <label class="mdl-textfield__label" for="newEmail">在此填写新邮箱</label>
                         </div>
                     </td>
@@ -39,4 +39,11 @@
             </table>
         </form>
     </div>
+    @if (count($errors) > 0)
+        <div class="mdl-card__actions mdl-card--border login-submit">
+            @foreach ($errors->all() as $error)
+                <span style="color: red">{{ $error }}</span>
+            @endforeach
+        </div>
+    @endif
 @endsection

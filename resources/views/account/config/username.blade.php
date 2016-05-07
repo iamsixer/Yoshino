@@ -22,7 +22,7 @@
                 <td class="mdl-data-table__cell--non-numeric">新用户名（至少4个字符）</td>
                 <td class="mdl-data-table__cell--non-numeric">
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="newUsername" name="newUsername" required>
+                        <input class="mdl-textfield__input" type="text" id="newUsername" name="name" required>
                         <label class="mdl-textfield__label" for="newUsername">在此填写新用户名</label>
                     </div>
                 </td>
@@ -39,4 +39,11 @@
         </table>
         </form>
     </div>
+    @if (count($errors) > 0)
+        <div class="mdl-card__actions mdl-card--border login-submit">
+            @foreach ($errors->all() as $error)
+                <span style="color: red">{{ $error }}</span>
+            @endforeach
+        </div>
+    @endif
 @endsection

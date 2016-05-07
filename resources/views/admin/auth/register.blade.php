@@ -35,24 +35,11 @@
                     <div class="mdl-card__actions mdl-card--border login-submit">
                         <button type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">点击注册</button>
                     </div>
-                    @if ($errors->has('name'))
+                    @if (count($errors) > 0)
                         <div class="mdl-card__actions mdl-card--border login-submit">
-                            <span style="color: red">{{ $errors->first('name') }}</span>
-                        </div>
-                    @endif
-                    @if ($errors->has('email'))
-                        <div class="mdl-card__actions mdl-card--border login-submit">
-                            <span style="color: red">{{ $errors->first('email') }}</span>
-                        </div>
-                    @endif
-                    @if ($errors->has('password'))
-                        <div class="mdl-card__actions mdl-card--border login-submit">
-                            <span style="color: red">{{ $errors->first('password') }}</span>
-                        </div>
-                    @endif
-                    @if ($errors->has('password_confirmation'))
-                        <div class="mdl-card__actions mdl-card--border login-submit">
-                            <span style="color: red">{{ $errors->first('password_confirmation') }}</span>
+                            @foreach ($errors->all() as $error)
+                                <span style="color: red">{{ $error }}</span>
+                            @endforeach
                         </div>
                     @endif
                 </form>

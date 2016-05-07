@@ -221,15 +221,15 @@ class AccountController extends Controller
 
     public function postUsername(Request $request){
         $uid = Auth::user()->id;
-        $username = $request->input('newUsername');
-        if(strlen($username)>4){
-            $user = User::find($uid);
-            $user->name = $username;
-            $user->save();
-            return redirect()->to('account');
-        }else{
-            return redirect()->to('account/username');
-        }
+        $this->validate($request,[
+            'name' => 'required|max:255|min:4'
+        ]);
+        $username = $request->input('name');
+
+        $user = User::find($uid);
+        $user->name = $username;
+        $user->save();
+        return redirect()->to('account');
     }
 
     public function getEmail(){
@@ -245,16 +245,15 @@ class AccountController extends Controller
             return redirect()->to('account');
         }
         $uid = Auth::user()->id;
-        $newEmail = $request->input('newEmail');
-        $pattern="/([a-z0-9]*[-_.]?[a-z0-9]+)*@([a-z0-9]*[-_]?[a-z0-9]+)+[.][a-z]{2,3}([.][a-z]{2})?/i";
-        if(preg_match($pattern,$newEmail)){
-            $user = User::find($uid);
-            $user->email = $newEmail;
-            $user->save();
-            return redirect()->to('account');
-        } else{
-            return redirect()->to('account/email');
-        }
+        $this->validate($request,[
+            'email' => 'required|email|max:255|unique:users'
+        ]);
+
+        $newEmail = $request->input('email');
+        $user = User::find($uid);
+        $user->email = $newEmail;
+        $user->save();
+        return redirect()->to('account');
     }
 
     public function getPlayInfo(Request $request){
