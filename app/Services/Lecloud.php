@@ -11,19 +11,19 @@ namespace App\Services;
 
 class Lecloud
 {
-    protected static $secretkey;
-    protected static $userId;
-    protected static $uu;
-    protected static $url = 'http://api.open.letvcloud.com/live/execute';
+    protected $secretkey;
+    protected $userId;
+    protected $uu;
+    protected $url = 'http://api.open.letvcloud.com/live/execute';
 
     public function __construct($sceretkey,$userId,$uu)
     {
-        self::$secretkey = $sceretkey;
-        self::$userId = $userId;
-        self::$uu = $uu;
+        $this->secretkey = $sceretkey;
+        $this->userId = $userId;
+        $this->uu = $uu;
     }
 
-    protected static function request($url,$data=null){
+    protected function request($url,$data=null){
         $ch = curl_init();
         $header[] = 'Content-Type: application/x-www-form-urlencoded;charset=utf-8';
         curl_setopt_array($ch, array(
@@ -41,12 +41,12 @@ class Lecloud
     }
 
     //创建活动
-    public static function  creatActivity($config){
+    public function  creatActivity($config){
         $parameter = array(
             'method' => 'letv.cloudlive.activity.create',
             'ver' => '3.0',
-            'userid' => self::$userId,
-            'timestamp' => self::getTimeStamp(),
+            'userid' => $this->userId,
+            'timestamp' => $this->getTimeStamp(),
             'startTime' => date('YmdHis',time()),
             'endTime' => date('YmdHis',time()+43200),
             'liveNum' => 1,
@@ -58,96 +58,96 @@ class Lecloud
 
         $parameter['activityName'] = $config['livename'] ? $config['livename'] : false;
         $parameter['needRecord'] = $config['record'];
-        $parameter['sign'] = self::getSign($parameter);
+        $parameter['sign'] = $this->getSign($parameter);
 
         $data = http_build_query($parameter);
-        $result = self::request(self::$url,$data);
+        $result = $this->request($this->url,$data);
         return $result;
     }
 
     //停止活动
-    public static function stopActivity($activityId){
+    public function stopActivity($activityId){
         $parameter = array(
             'method' => 'letv.cloudlive.activity.stop',
             'ver' => '3.0',
-            'userid' => self::$userId,
-            'timestamp' => self::getTimeStamp(),
+            'userid' => $this->userId,
+            'timestamp' => $this->getTimeStamp(),
             'activityId' => $activityId
         );
 
-        $parameter['sign'] = self::getSign($parameter);
+        $parameter['sign'] = $this->getSign($parameter);
 
         $data = http_build_query($parameter);
-        self::request(self::$url,$data);
+        $this->request($this->url,$data);
         return true;
     }
 
     //查询活动
-    public static function queryActivity($activityId){
+    public function queryActivity($activityId){
         $parameter = array(
             'method' => 'letv.cloudlive.activity.search',
             'ver' => '3.0',
-            'userid' => self::$userId,
-            'timestamp' => self::getTimeStamp(),
+            'userid' => $this->userId,
+            'timestamp' => $this->getTimeStamp(),
             'activityId' => $activityId
         );
         if($activityId){
-            $parameter['sign'] = self::getSign($parameter);
+            $parameter['sign'] = $this->getSign($parameter);
             $data = http_build_query($parameter);
-            return self::request(self::$url.$data);
+            return $this->request($this->url.$data);
         }else
             return false;
     }
 
     //获取推流地址
-    public static function getPushUrl($activityId){
+    public function getPushUrl($activityId){
         $parameter = array(
             'method' => 'letv.cloudlive.activity.getPushUrl',
             'ver' => '3.0',
-            'userid' => self::$userId,
-            'timestamp' => self::getTimeStamp(),
+            'userid' => $this->userId,
+            'timestamp' => $this->getTimeStamp(),
             'activityId' => $activityId
         );
 
-        $parameter['sign'] = self::getSign($parameter);
+        $parameter['sign'] = $this->getSign($parameter);
         $data = http_build_query($parameter);
-        return self::request(self::$url.'?'.$data);
+        return $this->request($this->url.'?'.$data);
     }
 
     //获取视频录制信息
-    public static function getPlayInfo($activityId){
+    public function getPlayInfo($activityId){
         $parameter = array(
             'method' => 'letv.cloudlive.activity.getPlayInfo',
             'ver' => '3.0',
-            'userid' => self::$userId,
-            'timestamp' => self::getTimeStamp(),
+            'userid' => $this->userId,
+            'timestamp' => $this->getTimeStamp(),
             'activityId' => $activityId
         );
 
-        $parameter['sign'] = self::getSign($parameter);
+        $parameter['sign'] = $this->getSign($parameter);
         $data = http_build_query($parameter);
-        return self::request(self::$url.'?'.$data);
+        return $this->request($this->url.'?'.$data);
     }
 
     //获取时间戳
-    private static function getTimeStamp(){
+    private function getTimeStamp(){
         $time = getdate();
         return $time['0'].'000';
     }
 
     //传入数组获取sign值
-    private static function getSign($array){
+    private function getSign($array){
         ksort($array);
         $signstr = '';
         foreach ($array as $key => $value) {
             $signstr .= $key;
             $signstr .= $value;
         }
-        $signstr .= self::$secretkey;
+        $signstr .= $this->secretkey;
         return md5($signstr);
     }
 
     public function getUU(){
-        return self::$uu;
+        return $this->uu;
     }
 }

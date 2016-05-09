@@ -9,20 +9,20 @@ namespace App\Services;
 
 class Leancloud
 {
-    protected static $appId;
-    protected static $appKey;
-    protected static $url = 'https://api.leancloud.cn/1.1/classes/_Conversation';
+    protected $appId;
+    protected $appKey;
+    protected $url = 'https://api.leancloud.cn/1.1/classes/_Conversation';
 
     public function __construct($appId,$appKey)
     {
-        self::$appId = $appId;
-        self::$appKey = $appKey;
+        $this->appId = $appId;
+        $this->appKey = $appKey;
     }
 
-    protected static function request($url,$data=null){
+    protected function request($url,$data=null){
         $ch = curl_init();
-        $header[] = 'X-LC-Id: '.self::$appId;
-        $header[] = 'X-LC-Key: '.self::$appKey;
+        $header[] = 'X-LC-Id: '.$this->appId;
+        $header[] = 'X-LC-Key: '.$this->appKey;
         $header[] = 'Content-Type: application/json';
         curl_setopt_array($ch, array(
             CURLOPT_URL => $url,
@@ -40,17 +40,17 @@ class Leancloud
         return $output;
     }
 
-    public static function createRoom($name){
+    public function createRoom($name){
         $info = [
             'name' => $name,
             'tr' => true
         ];
         $data = json_encode($info,JSON_UNESCAPED_UNICODE);
-        $result = self::request(self::$url,$data);
+        $result = $this->request($this->url,$data);
         return $result;
     }
 
     public function getAppId(){
-        return self::$appId;
+        return $this->appId;
     }
 }
