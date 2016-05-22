@@ -34,10 +34,11 @@
             <div class="mdl-card mdl-shadow--4dp" id="comments">
                 <div class="mdl-card__title mdl-card--expand header-background-image">
                     <h4 class="user-name" style="margin: 0;">Danmaku</h4>
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-danmu" style="margin-left: 2em;">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-danmu" style="margin-left: 2em;width:auto;margin-right: 2em;">
                         <input type="checkbox" id="switch-danmu" class="mdl-switch__input" onchange="showOrHideDanmu();">
                         <span class="mdl-switch__label"></span>
                     </label>
+                    <h6 class="user-name" style="margin:0;width:100%;text-align: right;">在线人数：<span id="onlineNum">loading</span></h6>
                 </div>
                 <div class="mdl-card__supporting-text" style="height: 70%;overflow-y:scroll;width:auto;" id="printWall">
                 </div>
@@ -55,7 +56,7 @@
 @section('js')
     <script src="{{ url('/js/jquery.danmu.js') }}"></script>
     <script src="{{ url('/js/blive.js') }}"></script>
-    <script src="{{ url('/js/AV.realtime.js') }}"></script>
+    <script src="{{ url('/js/realtime.browser.min.js') }}"></script>
     <script src="{{ url('/js/danmaku.js') }}"></script>
     <script src="{{ url('/js/live.min.js') }}"></script>
     <script>

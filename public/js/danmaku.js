@@ -1,40 +1,18 @@
 /**
- * Created by Volio on 2016/3/13.
+ * Created by Volio on 2016/5/22.
  */
-var firstFlag = true;
-var rt;
-var room;
+var Realtime = AV.Realtime;
+var onlineNum = document.getElementById('onlineNum');
 var inputSend = document.getElementById('danmaku');
+var room;
+var firstFlag = true;
+var clientId;
 
-bindEvent(document.body, 'keydown', function(e) {
+bindEvent(document.body, 'keydown', function (e) {
     if (e.keyCode === 13) {
-        if (firstFlag) {
-            main();
-        } else {
-            sendMsg();
-        }
+        sendMsg();
     }
 });
-
-function danmakuInit(appId,roomId) {
-    var clientId = '游客';
-    
-    $.ajax({
-        type: 'GET',
-        url: '../api/user/getinfo?type=name',
-        dataType: 'json',
-        cache: false,
-        success:function (data) {
-            if(data.name){
-                clientId = data.name;
-            }
-            main(appId,roomId,clientId);
-        },
-        error:function () {
-            main(appId,roomId,clientId);
-        }
-    });
-}
 
 function bindEvent(dom, eventName, fun) {
     if (window.addEventListener) {
@@ -44,77 +22,77 @@ function bindEvent(dom, eventName, fun) {
     }
 }
 
-function main(appId,roomId,clientId){
-    printWall.innerHTML = null;
-    showMessage('系统','正在连接弹幕服务器...');
-    if (!firstFlag) {
-        rt.close();
-    }
-
-    rt = AV.realtime({
-        appId: appId,
-        clientId: clientId,
-        secure: true
-    });
-
-    rt.on('open', function() {
-        firstFlag = false;
-        showMessage('系统','弹幕服务器连接成功！');
-        // 获得已有房间的实例
-        rt.room(roomId, function(object) {
-
-            // 判断服务器端是否存在这个 room，如果存在
-            if (object) {
-                room = object;
-
-                // 当前用户加入这个房间
-                room.join(function() {
-
-                    // 获取成员列表
-                    /*room.list(function(data) {
-                     showMessage('成员列表', data);
-                     rt.ping(data.slice(0, 20), function(list) {
-                     showMessage('当前在线', list);
-                     });
-                     });*/
-
-                });
-
-                // 房间接受消息
-                room.receive(function(data) {
-                    showMsg(data,true);
-                    printWall.scrollTop = printWall.scrollHeight;
-                });
-
-                room.log(function(data) {
-                    var l = data.length;
-
-                    for (var i = 0; i < l; i++) {
-                        showMsg(data[i]);
-                    }
-                });
-            } else {
-                showMessage('系统','弹幕服务器连接失败...');
+function danmakuInit(appId, roomId) {
+    $.ajax({
+        type: 'GET',
+        url: '../api/user/getinfo?type=name',
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+            if (data.name) {
+                clientId = data.name;
             }
-        });
-    });
-
-    rt.on('close', function() {
-        showMessage('系统','弹幕服务器被断开...');
-    });
-
-    // 监听服务情况
-    // rt.on('reuse', function() {
-    //     showMessage('系统','弹幕服务器正在重连，请耐心等待...');
-    // });
-
-    // 监听错误
-    rt.on('error', function() {
-        showMessage('系统','弹幕服务器遇到错误...');
+            main(appId, roomId, clientId);
+        },
+        error: function () {
+            clientId = '游客';
+            main(appId, roomId, clientId);
+        }
     });
 }
 
-function showMessage(name, data,danmuma) {
+function main(appId, roomId, clientId) {
+
+    var realtime = new Realtime({
+        appId: appId,
+        region: 'cn' // 美国节点为 "us"
+    });
+
+    showMessage('系统', '正在连接弹幕服务器...');
+    realtime.createIMClient(clientId).then(function (client) {
+        //接收消息
+        client.on('message', function(message) {
+            showMessage(message.from, message.text,true);
+        });
+
+        return client.getConversation(roomId);
+    }).then(function (conversation) {
+
+        showMessage('系统', '弹幕服务器连接成功！');
+        firstFlag = false;
+        return conversation.join();
+
+    }).then(function (conversation) {
+
+        room = conversation;
+        showOnlineNum();
+        setInterval(showOnlineNum,30000);
+        conversation.queryMessages({
+            limit: 15, // limit 取值范围 1~1000，默认 20
+        }).then(function(messages) {
+            var l = messages.length;
+            for (var i = 0; i < l; i++) {
+                showMsg(messages[i]);
+            }
+        })
+
+    }).catch(console.error);
+
+    realtime.on('disconnect', function () {
+        console.log('网络连接已断开');
+    });
+    realtime.on('schedule', function (attempt, delay) {
+        console.log(delay + 'ms 后进行第' + (attempt + 1) + '次重连');
+    });
+    realtime.on('retry', function (attempt) {
+        console.log('正在进行第' + attempt + '次重连');
+    });
+    realtime.on('reconnect', function () {
+        console.log('网络连接已恢复');
+    });
+}
+
+function showMessage(name, data, danmuma) {
     if (data) {
         console.log(name, data);
         msg = '<a>' + encodeHTML(name) + '</a> : <span>' + encodeHTML(data) + '</span>'
@@ -122,13 +100,14 @@ function showMessage(name, data,danmuma) {
     var div = document.createElement('div');
     div.className = 'user-danmaku';
     div.innerHTML = msg;
-    if(danmuma) {
+    if (danmuma) {
         sendDanmaku(encodeHTML(data));
     }
     printWall.appendChild(div);
-    if(printWall.childNodes.length>150){
+    if (printWall.childNodes.length > 150) {
         printWall.removeChild(printWall.childNodes[0]);
     }
+    printWall.scrollTop = printWall.scrollHeight;
 }
 
 function encodeHTML(source) {
@@ -138,17 +117,18 @@ function encodeHTML(source) {
         .replace(/>/g, '&gt;');
 }
 
-function showMsg(data,danmuma) {
-    var text = '';
-    var from = data.fromPeerId;
-    if (data.msg.type) {
-        text = data.msg.text;
-    } else {
-        text = data.msg;
-    }
+function showMsg(message, danmuma) {
+    var text = message.text;
+    var from = message.from;
     if (String(text).replace(/^\s+/, '').replace(/\s+$/, '')) {
         showMessage(encodeHTML(from), text, danmuma);
     }
+}
+
+function showOnlineNum(){
+    room.count().then(function (count) {
+        onlineNum.innerHTML = count;
+    });
 }
 
 function sendMsg() {
@@ -161,49 +141,44 @@ function sendMsg() {
     var val = inputSend.value;
 
     // 不让发送空字符
-    if (!String(val).replace(/^\s+/, '').replace(/\s+$/, '')) {
-        alert('请输入点文字！');
-    }else {
+    if (String(val).replace(/^\s+/, '').replace(/\s+$/, '')) {
         //发送消息
-        room.send({
-            text: val
-        }, {
-            type: 'text'
-        }, function (data) {
+        room.send(new AV.TextMessage(val)).then(function () {
             inputSend.value = '';
-            showMessage('我', val,true);
-            printWall.scrollTop = printWall.scrollHeight;
-        });
+            showMessage(clientId, val, true);
+        })
+    } else {
+        alert('请输入点文字！');
     }
 }
 
 $("#danmu").danmu({
-    left:0,
-    top:5,
-    height:210,
-    width:"100%",
-    speed:7000,
-    opacity:1,
-    font_size_small:16,
-    font_size_big:24,
-    top_botton_danmu_time:6000
+    left: 0,
+    top: 5,
+    height: 210,
+    width: "100%",
+    speed: 7000,
+    opacity: 1,
+    font_size_small: 16,
+    font_size_big: 24,
+    top_botton_danmu_time: 6000
 });
 
 $('#danmu').danmu('danmuStart');
 
-function sendDanmaku(message){
+function sendDanmaku(message) {
     var text = message;
     var color = "#FFFFFF";
     var position = 0;
-    var time = $('#danmu').data("nowTime")+1;
+    var time = $('#danmu').data("nowTime") + 1;
     var size = 1;
-    var text_obj='{ "text":"'+text+'","color":"'+color+'","size":"'+size+'","position":"'+position+'","time":'+time+'}';
-    var new_obj=eval('('+text_obj+')');
-    $('#danmu').danmu("addDanmu",new_obj);
+    var text_obj = '{ "text":"' + text + '","color":"' + color + '","size":"' + size + '","position":"' + position + '","time":' + time + '}';
+    var new_obj = eval('(' + text_obj + ')');
+    $('#danmu').danmu("addDanmu", new_obj);
 }
 
 function showOrHideDanmu() {
-    if(danmu.style.display == 'none')
+    if (danmu.style.display == 'none')
         $('#danmu').show();
     else
         $('#danmu').hide();
