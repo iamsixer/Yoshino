@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Userinfo;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -28,7 +30,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/account';
+    protected $redirectTo = '/';
 
     /**
      * Create a new authentication controller instance.
@@ -63,10 +65,29 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        //开始事务
+        DB::beginTransaction();
+
+        try{
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+            ]);
+
+            $user_info = new Userinfo();
+            $user_info->uid = $user->id;
+            $user_info->room_name = $user->name.'的直播';
+            $user_info->room_desc = '暂无简介';
+            $user_info->long_desc = '暂无简介';
+            $user_info->save();
+            //事务提交
+            DB::commit();
+        }catch (\Exception $e) {
+            //事务回滚
+            DB::rollBack();
+        }
+
+        return $user;
     }
 }

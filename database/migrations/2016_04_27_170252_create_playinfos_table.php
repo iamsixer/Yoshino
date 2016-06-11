@@ -15,10 +15,13 @@ class CreatePlayinfosTable extends Migration
         Schema::create('playinfos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('uid')->index();
+            $table->string('name');
             $table->string('activityId');
             $table->integer('videoId');
             $table->string('videoUnique');
+            $table->string('cover');
             $table->integer('ctime');
+            $table->integer('views');
             $table->timestamps();
         });
     }

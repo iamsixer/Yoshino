@@ -1,4 +1,4 @@
-# Lelive
+# Anotherlive
 
 ### 安装说明
 
@@ -16,12 +16,12 @@ Tokenizer PHP Extension
 
 运行命令
 ```
-git clone https://github.com/volio/Lelive.git
+git clone https://github.com/volio/Anotherlive.git
 ```
 
 2) 安装composer依赖
 
-在clone下来的`Lelive`文件夹中运行命令
+在clone下来的`Anotherlive`文件夹中运行命令
 
 ```
 cp .env.example .env
@@ -67,6 +67,12 @@ UU=
 //Leancloud配置文件
 APPID=
 APPKEY=
+
+//七牛配置文件
+QINIU_DOMAIN=
+QINIU_ACCESS_KEY=
+QINIU_SECRET_KEY=
+QINIU_BUCKET=
 ```
 之后执行
 ```
@@ -83,7 +89,7 @@ php artisan key:generate
 
 设定laravel应用所需的key
 
-上述命令执行完成后,请在`Lelive`文件夹中使用命令
+上述命令执行完成后,请在`Anotherlive`文件夹中使用命令
 
 如仅需表结构，可在composer依赖安装完毕后运行命令
 ```
@@ -131,11 +137,7 @@ server {
 
 ## Todo
 
-- [x] 弹幕重复bug修复
-- [x] 直播录制视频观看
-- [x] 游客ID区分
-- [ ] 直播期间允许修改标题和简介
+- [ ] 后台界面更换
+- [ ] 视频录制界面完善
 
-## LICENSE
-
-MIT © [Volio](https://niconiconi.org)
+## 非开源

@@ -24,7 +24,7 @@ class AuthController extends Controller
 
     protected function validator(array $data)
     {
-        Validator::extend('invite', function($field,$value,$parameters){
+        Validator::extend('invite', function ($field, $value, $parameters) {
             return $value == env('INVITECODE', 'example');
         });
 
@@ -33,7 +33,7 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:admins',
             'password' => 'required|confirmed|min:6',
             'invite' => 'required|invite',
-        ],[
+        ], [
             'invite.invite' => 'Invalid invite code!',
         ]);
 

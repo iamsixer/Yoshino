@@ -16,6 +16,7 @@ class CreateLiveinfoTable extends Migration
             $table->increments('id');
             $table->integer('uid')->unique();
             $table->integer('ctime')->index();
+            $table->integer('category_id')->index();
             $table->string('title');
             $table->string('description');
             $table->string('activityId');

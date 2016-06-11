@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->status == 1;
         });
 
-        $gate->define('is-user-playinfo',function($user,$playInfo){
+        $gate->define('is-user-video',function($user,$playInfo){
             return $user->id == $playInfo->uid;
         });
     }

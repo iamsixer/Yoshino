@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests;
+use App\Models\Category;
 use App\Models\Playinfo;
+use App\Models\Userinfo;
 use App\User;
-use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 
 use App\Facades\Lecloud;
 use App\Models\Liveinfo;
-use App\Models\Cover;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
@@ -23,302 +22,135 @@ class AccountController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        view()->share('title','直播管理');
+        view()->share('title', '个人中心');
     }
 
     /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
+     * 个人中心首页
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function getIndex(){
-        view()->share('livestatus',$this->getLivestatus());
-
+    public function getIndex()
+    {
+        //获取block状态
         if (Gate::denies('is-blocked')) {
-            return view('account.config.blocked');
+            $blocked = true;
+        } else {
+            $blocked = false;
         }
+        //获取直播状态
+        $live_status = $this->getLiveStatus();
 
-        return view('account.config.index');
-    }
-
-    public function getCreate(){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        view()->share('livestatus',$this->getLivestatus());
-        if($this->getLivestatus()){
-            return redirect()->to('account');
-        }
-        return view('account.config.create');
-    }
-
-    public function postCreate(Request $request){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        if($this->getLivestatus()){
-            return redirect()->to('account');
-        }
-
-        $config['livename'] = $request->input('livename') ? $request->input('livename') : $request->user()->name.'的直播';
-        $config['record'] = $request->input('record') ? 1 : 0;
-        $config['codeRateTypes'] = '99';
-        if($request->input('rate4'))
-            $config['codeRateTypes'] .= ',25';
-        if($request->input('rate3'))
-            $config['codeRateTypes'] .= ',19';
-        if($request->input('rate2'))
-            $config['codeRateTypes'] .= ',16';
-        if($request->input('rate1'))
-            $config['codeRateTypes'] .= ',13';
-
-        $result = Lecloud::creatActivity($config);
-        $res_arr  = json_decode($result,true);
-        $activityId = array_key_exists('activityId', $res_arr) ? $res_arr['activityId'] : false;
-        if($activityId){
-            $Liveinfo = new Liveinfo();
-            $Liveinfo->uid = Auth::user()->id;
-            $Liveinfo->ctime = time();
-            $Liveinfo->title = $config['livename'];
-            $Liveinfo->description = $request->input('livedes') ? $request->input('livedes') : '暂无简介';
-            $Liveinfo->activityId = $activityId;
-            if($Liveinfo->save()){
-                if($config['record']){
-                    $Playinfo = new Playinfo();
-                    $Playinfo->uid = Auth::user()->id;
-                    $Playinfo->activityId = $activityId;
-                    $Playinfo->ctime = time();
-                    $Playinfo->save();
-                }
-                return redirect()->to('/account/info');
-            }else{
-                return redirect()->to('/account/create');
-            }
-        }else
-            return redirect()->to('/account/create');
-    }
-
-    public function getStop(){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        view()->share('livestatus',$this->getLivestatus());
-        if(!$this->getLivestatus()){
-            return redirect()->to('account/create');
-        }
-        return view('account.config.stop');
-    }
-
-    public function postStop(){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        if(!$this->getLivestatus()){
-            return redirect()->to('account/create');
-        }
-
-        $liveinfo = Liveinfo::select('activityId')->where('uid',Auth::user()->id)->first();
-        $activityId = $liveinfo->activityId;
-        Lecloud::stopActivity($activityId);
-        if(Liveinfo::where('uid',Auth::user()->id)->delete()){
-            return redirect()->to('account/create');
-        }else{
-            return redirect()->to('account/stop');
-        }
-    }
-
-    public function getInfo(){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        view()->share('livestatus',$this->getLivestatus());
-        if(!$this->getLivestatus()){
-            return redirect()->to('account/create');
-        }
-
-        $liveinfo = Liveinfo::select('activityId')->where('uid',Auth::user()->id)->first();
-        $activityId = $liveinfo->activityId;
-        $json = Lecloud::getPushUrl($activityId);
-        $arr = json_decode($json,true);
-        $pushAll = array_key_exists('lives',$arr) ? $arr['lives'][0]['pushUrl'] : null;
-        $pushUrl = 'rtmp://w.gslb.lecloud.com/live';
-        $pushKey = str_replace('rtmp://w.gslb.lecloud.com/live/','',$pushAll);
-
-        return view('account.config.info',[
-            'pushUrl' => $pushUrl,
-            'pushKey' => $pushKey,
-            'pushAll' => $pushAll,
+        return view('account.config.index', [
+            'live_status' => $live_status,
+            'blocked' => $blocked
         ]);
     }
 
-    public function getCover(){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        view()->share('livestatus',$this->getLivestatus());
-        $uid = Auth::user()->id;
-
-        if(Cover::where('uid',$uid)->count()){
-            $coverinfo = Cover::select('cover')->where('uid',$uid)->first();
-            $cover = $coverinfo['cover'];
-        }else{
-            $cover = '';
-        }
-
-        return view('account.config.cover',[
-            'cover' => $cover,
+    /**
+     * 用户个人设置
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function getSetting()
+    {
+        return view('account.config.setting', [
+            'title' => '资料设置'
         ]);
     }
 
-    public function postCover(Request $request){
+    /**
+     * 直播间信息设置
+     */
+    public function getManage()
+    {
+        //获取用户block状态
         if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
+            return redirect()->route('account');
         }
+        $uid = $this->getUserId();
+        //获取个人信息
+        $room_info = Userinfo::select('cover', 'room_name', 'room_desc', 'long_desc', 'category_id')->where('uid', $uid)->first();
+        //获取分类信息
+        $categories = Category::select('id', 'name')->get();
+
+        $cover_url = $room_info['cover'];
+        $room_name = $room_info['room_name'];
+        $room_desc = $room_info['room_desc'];
+        $long_desc = $room_info['long_desc'];
+        $category_id = $room_info['category_id'];
+
+        return view('account.config.manage', [
+            'title' => '直播间设置',
+            'cover_url' => $cover_url,
+            'room_name' => $room_name,
+            'room_desc' => $room_desc,
+            'long_desc' => $long_desc,
+            'category_id' => $category_id,
+            'categories' => $categories
+        ]);
+    }
+
+    /**
+     * 保存封面图
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postCover(Request $request)
+    {
+        //获取用户block状态
+        if (Gate::denies('is-blocked')) {
+            return redirect()->route('account');
+        }
+        //获取UID
         $uid = Auth::user()->id;
 
-        if(!$request->hasFile('cover')){
-            return redirect()->to('/account/cover');
+        //判断request是否有文件
+        if (!$request->hasFile('cover')) {
+            return redirect()->route('account_manage');
         }
         $file = $request->file('cover');
         //判断文件上传过程中是否出错
-        if(!$file->isValid()){
-            return redirect()->to('/account/cover');
+        if (!$file->isValid()) {
+            return redirect()->route('account_manage');
         }
 
-        $destPath = realpath(public_path('cover'));
-        if(!file_exists($destPath))
-            mkdir($destPath,0755,true);
+        //获取文件后缀
+        $fileType = substr($file->getClientOriginalName(), strrpos($file->getClientOriginalName(), '.'));
+        //计算新文件名
+        $filename = md5($file->getClientOriginalName() . time()) . $fileType;
 
-        $fileMimeType = $file->getClientMimeType();
-        $fileType = str_replace('image/','.',$fileMimeType);
-        $filename = md5($file->getClientOriginalName()).$fileType;
+        //上传临时文件到七牛
+        $disk = \Storage::disk('qiniu');
+        $disk->getDriver()->putFile($filename, $file->getRealPath());
+        //获取文件地址
+        $url = $disk->getDriver()->downloadUrl($filename);
 
-        if(!$file->move($destPath,$filename)){
-            return redirect()->to('/account/cover');
-        }else{
-            if(Cover::where('uid',$uid)->count()){
-                Cover::where('uid',$uid)->update(['cover'=>$filename]);
-            }else{
-                $cover = new Cover();
-                $cover->uid = $uid;
-                $cover->cover = $filename;
-                $cover->save();
-            }
-            return redirect()->to('/account/cover');
+        if ($url) {
+            //保存地址
+            $url = str_replace('http://', 'https://', $url);
+            Userinfo::where('uid', $uid)->update(['cover' => $url]);
         }
+
+        return redirect()->route('account_manage');
     }
 
-    public function getLivestatus()
+    /**
+     * 获取UID
+     * @return mixed
+     */
+    protected function getUserId()
     {
-        $this->livestatus = DB::table('liveinfo')->where('uid',Auth::user()->id)->count();
-        return $this->livestatus;
+        return Auth::user()->id;
     }
 
-    public function getUsername(){
-        view()->share('livestatus',$this->getLivestatus());
-        return view('account.config.username');
+
+    /**
+     * 获取直播状态
+     * @return mixed
+     */
+    public function getLiveStatus()
+    {
+        $live_status = Liveinfo::where('uid', Auth::user()->id)->count();
+        return $live_status;
     }
 
-    public function postUsername(Request $request){
-        $uid = Auth::user()->id;
-        $this->validate($request,[
-            'name' => 'required|max:255|min:4'
-        ]);
-        $username = $request->input('name');
-
-        $user = User::find($uid);
-        $user->name = $username;
-        $user->save();
-        return redirect()->to('account');
-    }
-
-    public function getEmail(){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        view()->share('livestatus',$this->getLivestatus());
-        return view('account.config.email');
-    }
-
-    public function postEmail(Request $request){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        $uid = Auth::user()->id;
-        $this->validate($request,[
-            'email' => 'required|email|max:255|unique:users'
-        ]);
-
-        $newEmail = $request->input('email');
-        $user = User::find($uid);
-        $user->email = $newEmail;
-        $user->save();
-        return redirect()->to('account');
-    }
-
-    public function getPlayInfo(Request $request){
-        if (Gate::denies('is-blocked')) {
-            return redirect()->to('account');
-        }
-        view()->share('livestatus',$this->getLivestatus());
-        $uid = Auth::user()->id;
-        if($request->get('id')) {
-            $playInfoId = $request->get('id');
-            $playInfo = Playinfo::select('uid','activityId','ctime','videoId','videoUnique')->where('id',$playInfoId)->first();
-            if((!$playInfo) || Gate::denies('is-user-playinfo',$playInfo)){
-                return redirect()->to('account/playinfo');
-            }
-            if(!$playInfo['videoId']){
-                $json = Lecloud::getPlayInfo($playInfo['activityId']);
-                $arr = json_decode($json,true);
-                if($arr['machineInfo']){
-                    Playinfo::where('id',$playInfoId)->update([
-                        'videoId' => $arr['machineInfo'][0]['videoId'],
-                        'videoUnique' => $arr['machineInfo'][0]['videoUnique']
-                    ]);
-                    $uu = Lecloud::getUU();
-                    return view('account.config.playvideo',[
-                        'info' => '',
-                        'uu' => $uu,
-                        'videoUnique' => $arr['machineInfo'][0]['videoUnique']
-                    ]);
-                }else{
-                    if((time()-$playInfo['ctime'])>86400){
-                        Playinfo::where('id',$playInfoId)->delete();
-                        return redirect()->to('account/playinfo');
-                    }else{
-                        return view('account.config.playvideo',[
-                            'info' => '视频还在录制或者转码中',
-                            'videoUnique'=>''
-                        ]);
-                    }
-                }
-            }else{
-                $uu = Lecloud::getUU();
-                return view('account.config.playvideo',[
-                    'info' => '',
-                    'uu' => $uu,
-                    'videoUnique' => $playInfo['videoUnique']
-                ]);
-            }
-        }else{
-            $playInfoList = Playinfo::select('id', 'activityId', 'ctime')->where('uid', $uid)->orderBy('id', 'desc')->paginate(20);
-            $playInfo = [];
-            foreach ($playInfoList as $value) {
-                $arr['id'] = $value['id'];
-                $arr['activityId'] = $value['activityId'];
-                $arr['ctime'] = date('Y-m-d H:i:s', $value['ctime']);
-                array_push($playInfo, $arr);
-            }
-
-            $previousPageUrl = $playInfoList->previousPageUrl();
-            $nextPageUrl = $playInfoList->nextPageUrl();
-
-            return view('account.config.playinfo',[
-                'playInfo' => $playInfo,
-                'previousPageUrl' => $previousPageUrl,
-                'nextPageUrl' => $nextPageUrl
-            ]);
-        }
-    }
 }
