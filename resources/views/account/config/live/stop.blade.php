@@ -35,6 +35,17 @@
             </form>
         </div>
     </div>
+    <div class="card">
+        <div class="card-header">
+            <h4>教程参考</h4>
+        </div>
+        <div class="card-block">
+            <p>OBS 使用教程：<a href="http://www.douyu.com/cms/zhibo/201311/13/250.shtml" target="_blank">http://www.douyu.com/cms/zhibo/201311/13/250.shtml</a>
+            </p>
+            <p>Youtube 推荐编码设置：<a href="https://support.google.com/youtube/answer/2853702" target="_blank">https://support.google.com/youtube/answer/2853702</a>
+            </p>
+        </div>
+    </div>
 @endsection
 
 @section('js')
@@ -46,7 +57,7 @@
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
-                    if(data.pushUrl){
+                    if (data.pushUrl) {
                         push_url.value = data.pushUrl;
                         show_push_url.innerHTML = '刷新';
                     }

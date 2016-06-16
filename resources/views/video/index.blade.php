@@ -32,7 +32,7 @@
             @endif
             @foreach($live_info as $value)
                 <div class="col-xs-6 col-sm-6 col-md-3">
-                    <a href="{{ 'http://v.live.niconico.in/#!v/'.$value['uid'] }}">
+                    <a href="{{ url('/u/'.$value['uid']).'?m=flash' }}">
                         <div class="card shadow-card no-margin-bottom">
                             <div class="live-card"
                                  style="background-image: url({{ $value['cover'] ? $value['cover'] : '//s-img.niconico.in/orj480/a15b4afegw1f3n1bg7jmvj23m32jou14.jpg' }});"></div>

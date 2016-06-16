@@ -1,9 +1,5 @@
 @extends('layouts.layout')
 
-@section('css')
-    <link href="//static.niconico.in/live/css/video-js.min.css" rel="stylesheet">
-@endsection
-
 @section('content')
     <div class="container-fluid">
         <div class="sub-header">
@@ -22,21 +18,18 @@
         <div class="container-build row">
             <div class="col-xs-12 col-sm-12 col-md-8">
                 <div class="card shadow-card" id="left-card">
-                    <div class="live-card" id="player">
-                        <video id="HLS-video" class="video-js" controls>
-                            <source src="http://r.gslb.lecloud.com/live/hls/{{ $liveId }}/desc.m3u8?ajax=1"
-                                    type="application/x-mpegURL">
-                        </video>
-                    </div>
+                    <div class="live-card" id="player"></div>
                     <div class="card-block">
                         <span>播放模式选择：</span>
-                        <a href="{{ url('/u/'.$id.'?m=flash') }}" class="btn btn-secondary btn-sm">
+                        <a class="btn btn-primary btn-sm">
                             FLASH（延迟低）
                         </a>
-                        <a class="btn btn-primary btn-sm">
+                        <a href="{{ 'http://v.live.niconico.in/#!v/'.$id }}" class="btn btn-secondary btn-sm">
                             HLS（MAC不会煎鸡蛋了）
                         </a>
                     </div>
+                </div>
+                <div class="card shadow-card" id="player-controller">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-4">
@@ -72,13 +65,12 @@
 
 @section('js')
     <script src="{{ url('/js/vendor/realtime.browser.min.js') }}"></script>
+    <script src="{{ url('/js/vendor/blive.js') }}"></script>
     <script src="{{ url('/js/0.1/danmaku.js') }}"></script>
-    <script src="//static.niconico.in/live/js/video.min.js"></script>
-    <script src="//static.niconico.in/live/js/videojs-contrib-hls.min.js"></script>
     <script>
         danmakuInit('{{ $appId }}', '{{ $roomId }}');
-        var player = videojs('HLS-video');
-        player.play();
+        var player = new CloudLivePlayer();
+        player.init({activityId: "{{ $activityId }}"}, 'player');
         $(document).ready(function () {
             var playerHeight = $(".live-card").width() * 0.5625;
             $(".live-card").css("height", playerHeight + "px");

@@ -42,8 +42,8 @@
             <div class="container-fluid top-bar">
                 <h6>直播间地址：
                     <span class="user-info-setting">
-                        <a href="{{ 'http://v.live.niconico.in/#!v/'.Auth::user()->id }}" target="_blank">
-                            <i class="fa fa-link"></i> {{ 'http://v.live.niconico.in/#!v/'.Auth::user()->id }}
+                        <a href="{{ url('/u/'.Auth::user()->id) }}" target="_blank">
+                            <i class="fa fa-link"></i> {{ url('/u/'.Auth::user()->id) }}
                         </a>
                     </span>
                 </h6>

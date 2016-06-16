@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Models\Category;
 use App\Models\User;
 use GrahamCampbell\Markdown\Facades\Markdown;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Liveinfo;
 use App\Facades\Leancloud;
@@ -44,7 +45,7 @@ class LiveController extends Controller
         $living_user = Liveinfo::select('uid')->where('ctime', '>', time() - 43200)->orderBy('id', 'desc')->limit(4)->get();
         foreach ($living_user as $user) {
             $arr['uid'] = $user['uid'];
-            $user_info = Userinfo::select('cover','room_name', 'room_desc')->where('uid', $user['uid'])->first();
+            $user_info = Userinfo::select('cover', 'room_name', 'room_desc')->where('uid', $user['uid'])->first();
             $user_email = User::select('email')->where('id', $user['uid'])->first();
             $arr['title'] = $user_info['room_name'];
             $arr['email'] = $user_email['email'];
@@ -159,9 +160,9 @@ class LiveController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function getLive($id)
+    public function getLive($id, Request $request)
     {
-        $live_info = DB::table('liveinfo')->select('title', 'activityId','liveId')->where('uid', $id)->first();
+        $live_info = DB::table('liveinfo')->select('title', 'activityId', 'liveId')->where('uid', $id)->first();
         $user = User::select('name', 'email')->where('id', $id)->first();
         //判断有无该user
         if (!$user) {
@@ -188,15 +189,32 @@ class LiveController extends Controller
 
         if ($live_info) {
             $liveId = $live_info->liveId;
+            $activityId = $live_info->activityId;
         } else {
-            $liveId = 'null';
+            $liveId = null;
+            $activityId = null;
         }
 
         $name = $user->name;
         $email = $user->email;
         $appId = Leancloud::getAppId();
 
+        //判断是否flash模式播放
+        if ($request->input('m') && ($request->input('m') == 'flash')) {
+            return view('video.flash', [
+                'id' => $id,
+                'title' => $title,
+                'description' => $description,
+                'name' => $name,
+                'activityId' => $activityId,
+                'email' => $email,
+                'appId' => $appId,
+                'roomId' => $roomId,
+            ]);
+        }
+
         return view('video.room', [
+            'id' => $id,
             'title' => $title,
             'description' => $description,
             'name' => $name,
@@ -209,7 +227,7 @@ class LiveController extends Controller
 
     public function getAbout()
     {
-        return view('about',[
+        return view('about', [
             'title' => '关于'
         ]);
     }
