@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>Niconiconi</title>
+    <title>AnotherLive</title>
     <link rel="shortcut icon" href="{{ url('/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url('/css/0.1/bootstrap.min.css') }}">
     <link rel="stylesheet" href="//cdn.bootcss.com/tether/1.3.2/css/tether.css">
@@ -17,7 +17,7 @@
 <div class="container-fluid top-bar">
     <nav class="navbar navbar-inverse navbar-fixed-top live-nav-top">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <i class="fa fa-home"></i> Niconiconi
+            <i class="fa fa-home"></i> AnotherLive
         </a>
         <ul class="nav navbar-nav">
             <li class="nav-item">
