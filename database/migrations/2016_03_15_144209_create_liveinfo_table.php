@@ -20,6 +20,7 @@ class CreateLiveinfoTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->string('activityId');
+            $table->string('liveId');
             $table->timestamps();
         });
     }
