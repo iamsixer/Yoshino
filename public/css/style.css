@@ -398,3 +398,17 @@ a {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+@media (min-width: 1600px) and (max-width: 1900px) {
+    .main-content {
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+}
+
+@media (min-width: 1900px){
+    .main-content {
+        max-width: 1680px;
+        margin: 0 auto;
+    }
+}

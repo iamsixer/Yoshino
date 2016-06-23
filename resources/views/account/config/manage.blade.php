@@ -72,7 +72,7 @@
 @endsection
 
 @section('js')
-    <script src="{{ url('/js/0.1/ajaxform.js') }}"></script>
+    <script src="{{ url('/js/ajaxform.js') }}"></script>
     <script>
         function getToken() {
             return '{{ csrf_token() }}';

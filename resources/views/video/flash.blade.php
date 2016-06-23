@@ -66,7 +66,7 @@
 @section('js')
     <script src="{{ url('/js/vendor/realtime.browser.min.js') }}"></script>
     <script src="{{ url('/js/vendor/blive.js') }}"></script>
-    <script src="{{ url('/js/0.1/danmaku.js') }}"></script>
+    <script src="{{ url('/js/danmaku.js') }}"></script>
     <script>
         danmakuInit('{{ $appId }}', '{{ $roomId }}');
         var player = new CloudLivePlayer();

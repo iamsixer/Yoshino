@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <title>{{ $title or '' }} - AnotherLive</title>
     <link rel="shortcut icon" href="{{ url('/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url('/css/0.1/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url('/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="//cdn.bootcss.com/tether/1.3.2/css/tether.css">
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css">
     <link rel='stylesheet' href="//fonts.iwch.me/css?family=Open+Sans:600">
-    <link rel="stylesheet" href="{{ url('/css/0.1/style.css') }}">
+    <link rel="stylesheet" href="{{ url('/css/style.css') }}">
     @yield('css')
 </head>
 <script src="//cdn.bootcss.com/jquery/2.2.0/jquery.js"></script>

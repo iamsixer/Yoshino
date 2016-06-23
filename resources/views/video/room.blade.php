@@ -72,7 +72,7 @@
 
 @section('js')
     <script src="{{ url('/js/vendor/realtime.browser.min.js') }}"></script>
-    <script src="{{ url('/js/0.1/danmaku.js') }}"></script>
+    <script src="{{ url('/js/danmaku.js') }}"></script>
     <script src="//static.niconico.in/live/js/video.min.js"></script>
     <script src="//static.niconico.in/live/js/videojs-contrib-hls.min.js"></script>
     <script>
