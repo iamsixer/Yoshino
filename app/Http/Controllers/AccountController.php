@@ -126,7 +126,7 @@ class AccountController extends Controller
 
         if ($url) {
             //保存地址
-            $url = str_replace('http://', 'https://', $url);
+            $url = str_replace('http://', '//', $url);
             Userinfo::where('uid', $uid)->update(['cover' => $url]);
         }
 
