@@ -147,7 +147,7 @@ class UserController extends Controller
         } else if ($request->has('user_email')) {
             //输入验证
             $this->validate($request, [
-                'user_email' => 'required|email|max:255|unique:users'
+                'user_email' => 'required|email|max:255|unique:users,email'
             ]);
             //数据库更新
             User::where('id', $uid)->update([
