@@ -36,14 +36,17 @@ class VideoController extends Controller
         $record_videos = Playinfo::select('id', 'uid', 'name', 'cover', 'views', 'created_at')->orderBy('id', 'desc')->paginate(12);
 
         //获取用户信息
+        $users = $users_id = null;
         foreach ($record_videos as $record_video) {
             $users_id[] = $record_video['uid'];
         }
-        $users_info = User::select('id', 'name', 'email')->whereIn('id', $users_id)->get();
-        //KV关联
-        foreach ($users_info as $value) {
-            $users[$value['id']]['name'] = $value['name'];
-            $users[$value['id']]['email'] = $value['email'];
+        if($users_id){
+            $users_info = User::select('id', 'name', 'email')->whereIn('id', $users_id)->get();
+            //KV关联
+            foreach ($users_info as $value) {
+                $users[$value['id']]['name'] = $value['name'];
+                $users[$value['id']]['email'] = $value['email'];
+            }
         }
 
         return view('video.v.allac', [
