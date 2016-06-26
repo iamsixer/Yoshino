@@ -25,7 +25,7 @@
                             FLASH（延迟低）
                         </a>
                         <a href="{{ 'http://v.live.niconico.in/#!v/'.$id }}" class="btn btn-secondary btn-sm">
-                            HLS（MAC不会煎鸡蛋了）
+                            MSE（MAC不会煎鸡蛋了）
                         </a>
                     </div>
                 </div>

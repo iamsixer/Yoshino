@@ -34,7 +34,7 @@
                             FLASH（延迟低）
                         </a>
                         <a class="btn btn-primary btn-sm">
-                            HLS（MAC不会煎鸡蛋了）
+                            MSE（MAC不会煎鸡蛋了）
                         </a>
                     </div>
                 </div>
