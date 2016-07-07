@@ -139,8 +139,8 @@ class LiveManageController extends Controller
             return redirect()->route('live_manage');
         }
         //获取直播activity信息
-        $liveinfo = Liveinfo::select('activityId')->where('uid', Auth::user()->id)->first();
-        $activityId = $liveinfo['activityId'];
+        $live_info = Liveinfo::select('activityId')->where('uid', Auth::user()->id)->first();
+        $activityId = $live_info['activityId'];
         Lecloud::stopActivity($activityId);
         if (Liveinfo::where('uid', Auth::user()->id)->delete()) {
             return redirect()->route('live_manage');
