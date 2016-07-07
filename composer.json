@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "itbdw/laravel-storage-qiniu": "^1.0",
-        "graham-campbell/markdown": "^6.1"
+        "graham-campbell/markdown": "^6.1",
+	"predis/predis": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -49,6 +50,7 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+	"secure-http": false
     }
 }

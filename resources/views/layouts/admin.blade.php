@@ -58,7 +58,6 @@
     <div class="container-fluid">
         <footer class="content-footer">
             © 2016 <a href="https://niconiconi.org" target="_blank">Volio</a> All right reserved
-            <a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">&nbsp;&nbsp;赣ICP备14006361号-4</a>
         </footer>
     </div>
 </div>
