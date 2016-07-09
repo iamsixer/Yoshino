@@ -97,6 +97,12 @@ php artisan migrate
 ```
 进行数据库初始化
 
+之后运行
+```
+php artisan db:seed
+```
+进行数据初始化
+
 5）运行应用
 根目录下执行命令
 ```
