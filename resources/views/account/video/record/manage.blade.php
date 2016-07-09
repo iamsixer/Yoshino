@@ -7,35 +7,39 @@
         </div>
         <div class="card-block">
             <hr/>
-            <div class="form-group row">
-                <div class="col-sm-2">封面设置：</div>
-                <div class="col-sm-5">
-                    <img src="{{ $play_info['cover'] }}" class="image-border" style="max-width: 100%;">
+            <form action="{{ url(route('record_modify')) }}?vid={{ $play_info['id'] }}" method="post">
+                {!! csrf_field() !!}
+                <div class="form-group row">
+                    <div class="col-sm-2">封面设置：</div>
+                    <div class="col-sm-5">
+                        <img src="{{ $play_info['cover'] }}" class="image-border" style="max-width: 100%;">
+                    </div>
+                    <div class="col-sm-5">
+                        <h5 style="padding: .8em 0;"><i class="fa fa-play-circle"></i> 视频播放地址：</h5>
+                        <a href="{{ url('video/ac'.$play_info['id']) }}" target="_blank"
+                           style="word-wrap: break-word;word-break: normal;">
+                            {{ url('video/ac'.$play_info['id']) }}
+                        </a>
+                    </div>
                 </div>
-                <div class="col-sm-5">
-                    <h5 style="padding: .8em 0;"><i class="fa fa-play-circle"></i> 视频播放地址：</h5>
-                    <a href="{{ url('video/ac'.$play_info['id']) }}" target="_blank" style="word-wrap: break-word;word-break: normal;">
-                        {{ url('video/ac'.$play_info['id']) }}
-                    </a>
+                <div class="form-group row">
+                    <div class="col-sm-2">视频名称：</div>
+                    <div class="col-sm-5">
+                        <input type="text" name="name" class="form-control" value="{{ $play_info['name'] }}">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-2">视频名称：</div>
-                <div class="col-sm-5">
-                    <input type="text" class="form-control" value="{{ $play_info['name'] }}">
+                <div class="form-group row">
+                    <div class="col-sm-2">视频简介：</div>
+                    <div class="col-sm-5">
+                        <textarea class="form-control" rows="5" disabled></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-2">视频简介：</div>
-                <div class="col-sm-5">
-                    <textarea class="form-control" rows="5"></textarea>
+                <div class="form-group row">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary-outline">保 存</button>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-primary-outline">保 存</button>
-                </div>
-            </div>
+            </form>
             <hr/>
         </div>
     </div>

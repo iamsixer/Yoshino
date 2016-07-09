@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="sub-header">
-            <h3>{{ $title or 'Niconiconi' }}</h3>
+            <h3>{{ $title }}</h3>
         </div>
         <div class="container-build row">
             @foreach($record_videos as $video)
@@ -11,7 +11,7 @@
                     <a href="{{ url('/video/ac'.$video['id']) }}">
                         <div class="card shadow-card no-margin-bottom">
                             <div class="video-card"
-                                 style="background-image: url('{{ $video['cover'] ? $video['cover'] : '//s-img.niconico.in/orj480/a15b4afegw1f174um1elhj20g4093abh.jpg' }}');"></div>
+                                 style="background-image: url('{{ $video['cover'] or "//s-img.niconico.in/orj480/a15b4afegw1f174um1elhj20g4093abh.jpg" }}');"></div>
                             <div class="live-card-title">
                                 <div class="live-card-avatar">
                                     <img src="//secure.gravatar.com/avatar/{{ md5($users[$video['uid']]['email']) }}?s=50">
@@ -22,7 +22,7 @@
                     </a>
                     <div class="video-card-description">
                         <li>用户：<a href="#">{{$users[$video['uid']]['name']}}</a></li>
-                        <li>播放：<span style="color: #688ba2;">{{$video['views'] }}<span></li>
+                        <li>播放：<span style="color: #688ba2;">{{$video['views'] }}</span></li>
                         <li>发布于：{{$video['created_at'] }}</li>
                     </div>
                 </div>

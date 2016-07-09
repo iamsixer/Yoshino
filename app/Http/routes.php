@@ -61,6 +61,7 @@ Route::group(['middleware' => ['web'], 'prefix' => 'account'], function () {
     Route::get('video','Play\VideoManageController@getIndex')->name('account_video');
     Route::get('record/list','Play\VideoManageController@getRecordVideos')->name('record_all');
     Route::get('record/info','Play\VideoManageController@getRecordVideoManage')->name('record_manage');
+    Route::post('record/modify','Play\VideoManageController@postRecordVideoModify')->name('record_modify');
 });
 
 //后台认证路由
@@ -81,6 +82,7 @@ Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
     Route::get('video','AdminController@getVideo')->name('admin_video_index');
     Route::get('record/list','AdminController@getRecordVideos')->name('admin_record_list');
     Route::get('record/info','AdminController@getRecordVideoManage')->name('admin_record_manage');
+    Route::post('record/modify','AdminController@postRecordVideoModify')->name('admin_record_modify');
     //用户管理
     Route::get('users/normal','AdminController@getNormalUsers')->name('admin_users_normal');
     Route::get('users/blocked','AdminController@getBlockedUsers')->name('admin_users_blocked');

@@ -85,6 +85,33 @@ class VideoManageController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * 更新视频信息
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function postRecordVideoModify(Request $request)
+    {
+        $this->validate($request, [
+            'vid' => 'required|integer',
+            'name' => 'required|max:255'
+        ]);
+
+        $record_video_id = $request->input('vid');
+        $play_info = Playinfo::select('id', 'uid')->where('id', $record_video_id)->first();
+
+        //如果无数据或视频所属者错误则自动跳转
+        if ((!$play_info) || Gate::denies('is-user-video', $play_info)) {
+            return redirect()->route('record_all');
+        }
+
+        Playinfo::where('id', $record_video_id)->update([
+            'name' => $request->input('name')
+        ]);
+
+        return redirect()->route('record_manage');
+    }
+
 
     /**
      * 更新录制视频信息
@@ -92,7 +119,7 @@ class VideoManageController extends Controller
      * @param $record_video_id
      * @return mixed
      */
-    protected function modifyRecordVideoInfo($play_info, $record_video_id)
+    private function modifyRecordVideoInfo($play_info, $record_video_id)
     {
         $json = Lecloud::getPlayInfo($play_info['activityId']);
 
@@ -127,7 +154,7 @@ class VideoManageController extends Controller
      * @param $record_video_id
      * @return mixed
      */
-    public function modifyRecordVideoCover($play_info, $record_video_id)
+    private function modifyRecordVideoCover($play_info, $record_video_id)
     {
         $json = Lecloud::getVideoImage($play_info['videoId']);
         //更新cover
@@ -151,7 +178,7 @@ class VideoManageController extends Controller
      * 获取UID
      * @return mixed
      */
-    protected function getUserId()
+    private function getUserId()
     {
         return Auth::user()->id;
     }
