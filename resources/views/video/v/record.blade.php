@@ -33,7 +33,7 @@
     <script src="{{ url('/js/vendor/bcloud.js') }}"></script>
     <script>
         var player = new CloudVodPlayer();
-        player.init({uu: "{{ $uu }}", vu: "{{ $video_info['videoUnique'] }}"}, 'video_card');
+        player.init({uu: "{{ $uu }}", vu: "{{ $video_info['videoUnique'] }}","pu":"987B0D09E0","auto_play":1}, 'video_card');
         $(document).ready(function () {
             var playerHeight = $(".live-card").width() * 0.5625;
             $(".live-card").css("height", playerHeight + "px");
