@@ -11,10 +11,10 @@
                     <a href="{{ url('/video/ac'.$video['id']) }}">
                         <div class="card shadow-card no-margin-bottom">
                             <div class="video-card"
-                                 style="background-image: url('{{ $video['cover'] or "//s-img.niconico.in/orj480/a15b4afegw1f174um1elhj20g4093abh.jpg" }}');"></div>
+                                 style="background-image: url('{{ $video['cover'] ? $video['cover'] : "//s-img.niconico.in/orj480/a15b4afegw1f174um1elhj20g4093abh.jpg" }}');"></div>
                             <div class="live-card-title">
                                 <div class="live-card-avatar">
-                                    <img src="//secure.gravatar.com/avatar/{{ md5($users[$video['uid']]['email']) }}?s=50">
+                                    <img src="//cdn.v2ex.com/gravatar/{{ md5($users[$video['uid']]['email']) }}?s=50">
                                 </div>
                                 <p class="card-text" style="color:white">{{ $video['name'] }}</p>
                             </div>

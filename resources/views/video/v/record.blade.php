@@ -15,7 +15,7 @@
                 <div class="card shadow-card live-card" id="video_card"></div>
                 <div class="card shadow-card" id="video_card">
                     <div style="display: flex;align-items: center;">
-                        <img src="//secure.gravatar.com/avatar/{{ md5($author_info['email']) }}?s=60"
+                        <img src="//cdn.v2ex.com/gravatar/{{ md5($author_info['email']) }}?s=60"
                              class="live-title-avatar" style="margin: .4em">
                         <span style="padding: 0 .4em">用户: <a href="#">{{ $author_info['name'] }}</a></span>
                         <span style="padding: 0 .4em">发布于: {{ $video_info['created_at'] }}</span>

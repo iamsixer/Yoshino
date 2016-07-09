@@ -4,7 +4,7 @@
     <div class="container-fluid">
         <div class="sub-header">
             <h3 class="room-title">
-                <img src="//secure.gravatar.com/avatar/{{ md5($email) }}?s=60"
+                <img src="//cdn.v2ex.com/gravatar/{{ md5($email) }}?s=60"
                      class="live-title-avatar">
                 {{ $title }}
                 <span class="live-sub-title">

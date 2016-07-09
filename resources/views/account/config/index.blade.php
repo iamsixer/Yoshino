@@ -8,7 +8,7 @@
         <div class="card-block">
             <div class="container-fluid top-bar row user-center-left">
                 <div class="col-xs-12 col-md-3">
-                    <img src="//secure.gravatar.com/avatar/{{ md5(Auth::user()->email) }}?s=130" width="100%"
+                    <img src="//cdn.v2ex.com/gravatar/{{ md5(Auth::user()->email) }}?s=130" width="100%"
                          class="image-border">
                 </div>
                 <div class="col-xs-12 col-md-9">
