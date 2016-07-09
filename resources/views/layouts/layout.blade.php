@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $title or '' }} - AnotherLive</title>
+    <title>{{ isset($title) ? ($title . " - ") : null }}AnotherLive</title>
     <link rel="shortcut icon" href="{{ url('/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url('/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="//cdn.bootcss.com/tether/1.3.2/css/tether.css">
@@ -43,7 +43,8 @@
                 </li>
             @else
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/account') }}"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a>
+                    <a class="nav-link" href="{{ url('/account') }}"><i class="fa fa-user"></i> {{ Auth::user()->name }}
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/logout') }}"><i class="fa fa-sign-out"></i> 登出</a>

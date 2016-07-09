@@ -17,10 +17,7 @@ class LiveController extends Controller
 {
     public function __construct()
     {
-        /**
-         * view共享的title
-         */
-        view()->share('title', '直播');
+        //
     }
 
     /**
@@ -140,7 +137,7 @@ class LiveController extends Controller
             $user_email = User::select('email')->where('id', $user['uid'])->first();
             $arr['email'] = $user_email['email'];
             $arr['cover'] = $user_info['cover'];
-            $arr['title'] = $user_info['room_name'] ? $user_info['room_name'] : 'Niconiconi';
+            $arr['title'] = $user_info['room_name'] ? $user_info['room_name'] : '暂未设置房间名';
             $arr['description'] = $user_info['room_desc'] ? $user_info['room_desc'] : '暂无简介';
             array_push($living_info, $arr);
         }

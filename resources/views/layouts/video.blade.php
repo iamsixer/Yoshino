@@ -2,7 +2,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $title or '' }} - AnotherLive</title>
+    <title>{{ isset($title) ? ($title . " - ") : null }}AnotherLive</title>
     <link rel="shortcut icon" href="{{ url('/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url('/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="//cdn.bootcss.com/tether/1.3.2/css/tether.css">
