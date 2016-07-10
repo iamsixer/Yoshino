@@ -196,26 +196,26 @@ class LiveController extends Controller
         $email = $user->email;
         $appId = Leancloud::getAppId();
 
-        //判断是否flash模式播放
-        if ($request->input('m') && ($request->input('m') == 'flash')) {
-            return view('video.flash', [
+        //判断是否mse模式播放
+        if ($request->input('m') && ($request->input('m') == 'mse')) {
+            return view('video.mse', [
                 'id' => $id,
                 'title' => $title,
                 'description' => $description,
                 'name' => $name,
-                'activityId' => $activityId,
+                'liveId' => $liveId,
                 'email' => $email,
                 'appId' => $appId,
                 'roomId' => $roomId,
             ]);
         }
 
-        return view('video.room', [
+        return view('video.flash', [
             'id' => $id,
             'title' => $title,
             'description' => $description,
             'name' => $name,
-            'liveId' => $liveId,
+            'activityId' => $activityId,
             'email' => $email,
             'appId' => $appId,
             'roomId' => $roomId,

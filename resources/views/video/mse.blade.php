@@ -30,7 +30,7 @@
                     </div>
                     <div class="card-block">
                         <span>播放模式选择：</span>
-                        <a href="{{ url('/u/'.$id.'?m=flash') }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ url('/u/'.$id) }}" class="btn btn-secondary btn-sm">
                             FLASH（延迟低）
                         </a>
                         <a class="btn btn-primary btn-sm">

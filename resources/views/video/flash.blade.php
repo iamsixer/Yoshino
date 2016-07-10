@@ -24,7 +24,7 @@
                         <a class="btn btn-primary btn-sm">
                             FLASH（延迟低）
                         </a>
-                        <a href="{{ url('/u/'.$id) }}" class="btn btn-secondary btn-sm">
+                        <a href="{{ url('/u/'.$id.'?m=mse') }}" class="btn btn-secondary btn-sm">
                             MSE（MAC不会煎鸡蛋了）
                         </a>
                     </div>
