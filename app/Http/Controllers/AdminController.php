@@ -193,7 +193,6 @@ class AdminController extends Controller
                 //录制视频超过12小时无数据删除
                 if ((time() - $play_info['ctime']) > 86400) {
                     Playinfo::where('id', $record_video_id)->delete();
-                    return redirect()->route('admin_record_list');
                 }
             }
         } catch (\Exception $e) {
