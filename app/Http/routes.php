@@ -37,7 +37,6 @@ Route::group(['middleware' => ['web']], function () {
 
 //前台认证路由
 Route::group(['middleware' => ['web']], function () {
-    Route::auth();
     Route::get('login', 'Auth\AuthController@getLogin');
     Route::post('login', 'Auth\AuthController@postLogin');
     Route::get('register', 'Auth\AuthController@getRegister');
@@ -47,7 +46,6 @@ Route::group(['middleware' => ['web']], function () {
 
 //前台管理路由
 Route::group(['middleware' => ['web'], 'prefix' => 'account'], function () {
-    Route::auth();
     //用户信息
     Route::get('/', 'AccountController@getIndex')->name('account');
     Route::get('setting', 'AccountController@getSetting')->name('account_setting');
@@ -67,7 +65,6 @@ Route::group(['middleware' => ['web'], 'prefix' => 'account'], function () {
 //后台认证路由
 Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
     //注册登录
-    Route::auth();
     Route::get('login', 'Admin\AuthController@getLogin');
     Route::post('login', 'Admin\AuthController@postLogin');
     Route::get('register', 'Admin\AuthController@getRegister');
@@ -94,7 +91,6 @@ Route::group(['middleware' => ['web'], 'prefix' => 'admin'], function () {
 Route::group(['middleware' => ['web'], 'prefix' => 'api'], function () {
     //需登录认证API
     Route::group(['middleware' => ['web'], 'prefix' => 'user'], function () {
-        Route::auth();
         Route::get('getinfo', 'Api\UserController@getInfo');
         Route::get('setting/update', 'Api\UserController@getSettingUpdate');
         Route::post('setting/update', 'Api\UserController@postSettingUpdate');
