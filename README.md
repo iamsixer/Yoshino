@@ -1,5 +1,7 @@
 # Anotherlive
 
+[![Build Status](https://travis-ci.org/solarhell/AnotherLive.svg?branch=master)](https://travis-ci.org/solarhell/AnotherLive)
+
 ### 安装说明
 
 项目依赖
