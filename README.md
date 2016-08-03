@@ -143,7 +143,10 @@ server {
 }
 ```
 
-## Todo
+### Todo
 
 - [ ] 视频录制界面完善
 - [ ] 分类完善
+
+### LICENSE
+GPL V3
