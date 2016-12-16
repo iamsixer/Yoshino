@@ -1,4 +1,4 @@
-package yoshino.pili;
+package yoshino.support.pili;
 
 import com.qiniu.pili.Client;
 import com.qiniu.pili.Hub;
