@@ -1,4 +1,4 @@
-package net.lolihome.yoshino.support.pili;
+package yoshino.pili;
 
 import com.qiniu.pili.Client;
 import com.qiniu.pili.Hub;

@@ -1,4 +1,4 @@
-package net.lolihome.yoshino;
+package yoshino;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
