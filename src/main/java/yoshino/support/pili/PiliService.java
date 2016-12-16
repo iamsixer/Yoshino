@@ -4,6 +4,7 @@ import com.qiniu.pili.Client;
 import com.qiniu.pili.Hub;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
