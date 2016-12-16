@@ -1,6 +1,7 @@
 package yoshino.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -15,9 +16,9 @@ import java.util.Map;
 public class HomeController {
 
     @GetMapping("/")
-    public String Home(Map<String, Object> model) {
-        model.put("name", "world");
-        model.put("time", new Date());
+    public String Home(Model model) {
+        model.addAttribute("name", "world");
+        model.addAttribute("time", new Date());
         return "home";
     }
 }
