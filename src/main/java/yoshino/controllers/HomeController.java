@@ -14,7 +14,7 @@ import java.util.Date;
 @RequestMapping(value = "/")
 public class HomeController {
 
-    @GetMapping("/")
+    @GetMapping()
     public String Home(Model model) {
         model.addAttribute("name", "world");
         model.addAttribute("time", new Date());

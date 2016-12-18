@@ -39,7 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/account/**")
-                .hasAnyAuthority("USER","ADMIN").anyRequest().permitAll().and()
+                .hasAnyAuthority("USER","ADMIN")
+                .antMatchers("/admin/**")
+                .hasAnyAuthority("ADMIN")
+                .anyRequest().permitAll().and()
                 .formLogin().loginPage("/login").and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login").and()
