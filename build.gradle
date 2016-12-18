@@ -16,12 +16,18 @@ dependencies {
     //spring boot
     compile 'org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE'
     compile 'org.springframework.boot:spring-boot-starter-mustache:1.4.2.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.4.2.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-security:1.4.2.RELEASE'
 
     //stream sdk
     compile 'com.qiniu.pili:pili-sdk-java:2.0.0'
 
     //database
     compile 'mysql:mysql-connector-java:+'
+
+    //Hibernate
+    compile 'org.hibernate:hibernate-core:5.2.2.Final'
+    compile 'org.hibernate:hibernate-validator:5.2.4.Final'
 
     //test
     testCompile 'junit:junit:+'
