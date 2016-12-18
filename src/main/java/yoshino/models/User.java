@@ -32,7 +32,7 @@ public class User {
     private String password;
 
     @Column(name = "role", nullable = false, length = 20)
-    @ColumnDefault("USER")
+    @ColumnDefault("'USER'")
     private String role;
 
     public Long getId() {
