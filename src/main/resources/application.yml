@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  mustache:
+    suffix: .mustache
+    cache: false
+    expose-request-attributes: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/yoshino?useUnicode=true&characterEncoding=utf-8&serverTimezone=PRC&useSSL=false
+    username: root
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+security:
+  oauth2:
+    client:
+      clientId: confidential
+      clientSecret: secret
+      accessTokenUri: http://127.0.0.1:8081/oauth/token
+      userAuthorizationUri: http://127.0.0.1:8081/oauth/authorize
+    resource:
+      userInfoUri: http://127.0.0.1:8081/api/user
+
+logging:
+  level:
+    org.springframework.security: DEBUG
