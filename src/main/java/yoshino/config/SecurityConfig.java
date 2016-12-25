@@ -16,7 +16,7 @@ import yoshino.services.UserService;
  * Created by Volio on 2016/12/18.
  */
 @Configuration
-//@EnableOAuth2Sso
+@EnableOAuth2Sso
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserService userService;
@@ -37,24 +37,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .antMatchers("/account/**")
+//                .hasAnyAuthority("USER", "ADMIN")
+//                .antMatchers("/admin/**")
+//                .hasAnyAuthority("ADMIN")
+//                .anyRequest().permitAll().and()
+//                .formLogin().loginPage("/login").and()
+//                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login").and()
+//                .httpBasic();
+//    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/account/**")
-                .hasAnyAuthority("USER", "ADMIN")
-                .antMatchers("/admin/**")
-                .hasAnyAuthority("ADMIN")
-                .anyRequest().permitAll().and()
-                .formLogin().loginPage("/login").and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login").and()
-                .httpBasic();
+                .authenticated()
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/").permitAll();
     }
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/account/**").authenticated();
-//    }
 }
