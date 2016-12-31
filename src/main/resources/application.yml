@@ -21,14 +21,12 @@ spring:
 security:
   oauth2:
     client:
-      clientId:
-      clientSecret:
-      accessTokenUri:
-      userAuthorizationUri:
-      authenticationScheme: query
-      clientAuthenticationScheme: form
+      clientId: b8ce7bc1e853cbde499790e9e537ebb3
+      clientSecret: 1673a8490307c5ca90aa7cfd1b668135
+      accessTokenUri: http://127.0.0.1:8081/oauth/token
+      userAuthorizationUri: http://127.0.0.1:8081/oauth/authorize
     resource:
-      userInfoUri:
+      userInfoUri: http://127.0.0.1:8081/resource/user
 
 logging:
   level:
