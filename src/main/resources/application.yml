@@ -21,12 +21,12 @@ spring:
 security:
   oauth2:
     client:
-      clientId: b8ce7bc1e853cbde499790e9e537ebb3
-      clientSecret: 1673a8490307c5ca90aa7cfd1b668135
-      accessTokenUri: http://127.0.0.1:8081/oauth/token
-      userAuthorizationUri: http://127.0.0.1:8081/oauth/authorize
+      clientId: 868c292b75ea38c794e5ac1f5348d7d1
+      clientSecret: 7fa03341c4012c88f15cb2cf8d6bdec2
+      accessTokenUri: https://accounts.niconico.in/oauth/token
+      userAuthorizationUri: https://accounts.niconico.in/oauth/authorize
     resource:
-      userInfoUri: http://127.0.0.1:8081/resource/user
+      userInfoUri: https://accounts.niconico.in/resource/user
 
 logging:
   level:

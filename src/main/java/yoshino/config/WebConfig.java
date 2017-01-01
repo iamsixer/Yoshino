@@ -1,24 +1,32 @@
 package yoshino.config;
 
-import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
-import org.springframework.boot.web.servlet.ErrorPage;
+import com.qiniu.pili.Client;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import yoshino.engine.StreamEngine;
+import yoshino.support.pili.PiliEngine;
 
 /**
  * Created by Volio on 2016/12/18.
  */
 @Configuration
+@PropertySource("classpath:config/pili.properties")
 public class WebConfig {
 
     @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer() {
-        return container -> {
-            container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/400"));
-            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/403"));
-            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/404"));
-            container.addErrorPages(new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/500"));
-        };
+    public StreamEngine streamEngine(Environment env) {
+        PiliEngine piliEngine = new PiliEngine();
+        Client client = new Client(env.getProperty("accessKey"), env.getProperty("secretKey"));
+        piliEngine.setClient(client);
+        piliEngine.setHubName(env.getProperty("hubName"));
+        piliEngine.setHub(client.newHub(env.getProperty("hubName")));
+        piliEngine.setRTMPPublishUrl(env.getProperty("RTMPPublishUrl"));
+        piliEngine.setRTMPPlayUrl(env.getProperty("RTMPPlayUrl"));
+        piliEngine.setHLSPlayUrl(env.getProperty("HLSPlayUrl"));
+        piliEngine.setHDLPlayUrl(env.getProperty("HDLPlayUrl"));
+        piliEngine.setSnapshotPlayUrl(env.getProperty("SnapshotPlayUrl"));
+        return piliEngine;
     }
 }
