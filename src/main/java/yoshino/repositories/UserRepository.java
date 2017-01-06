@@ -10,5 +10,5 @@ import yoshino.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findOneByMail(String mail);
+    User findOneByUid(Long uid);
 }
