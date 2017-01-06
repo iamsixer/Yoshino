@@ -14,6 +14,7 @@ import java.util.Map;
 
 /**
  * Created by Volio on 2017/1/6.
+ * 监听登录成功事件
  */
 @Component
 public class OAuthSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
@@ -43,6 +44,7 @@ public class OAuthSuccessListener implements ApplicationListener<AuthenticationS
         rUser.setAvatar((String) userDetails.get("avatar"));
         rUser.setRole((String) userDetails.get("role"));
         rUser.setCreatedAt(new Date());
+        rUser.setStreamer(false);
 
         if (user == null) {
             userRepository.save(rUser);

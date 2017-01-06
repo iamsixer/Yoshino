@@ -28,6 +28,10 @@ public class User {
     @Column(name = "avatar", nullable = false, length = 200)
     private String avatar;
 
+    @Column(name = "streamer", nullable = false)
+    @ColumnDefault("false")
+    private boolean Streamer;
+
     @Column(name = "role", nullable = false, length = 20)
     @ColumnDefault("'ROLE_USER'")
     private String role;
@@ -75,6 +79,14 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public boolean isStreamer() {
+        return Streamer;
+    }
+
+    public void setStreamer(boolean streamer) {
+        Streamer = streamer;
     }
 
     public String getRole() {
