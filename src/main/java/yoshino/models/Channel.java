@@ -20,7 +20,7 @@ public class Channel {
     @JoinColumn(name = "uid", nullable = false)
     private User user;
 
-    @Column(name = "stream_key", nullable = false, length = 100)
+    @Column(name = "stream_key", nullable = false, length = 100, unique = true)
     private String streamKey;
 
     @Column(name = "name", nullable = false, length = 200)

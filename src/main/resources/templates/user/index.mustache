@@ -5,6 +5,11 @@
     <title>User</title>
 </head>
 <body>
-User Page!
+{{#publishUrl}}
+    推流地址:{{.}}
+{{/publishUrl}}
+{{^publishUrl}}
+    <a href="/api/user/channel/new">点击</a>创建您的直播频道
+{{/publishUrl}}
 </body>
 </html>

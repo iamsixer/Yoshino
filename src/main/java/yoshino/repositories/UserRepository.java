@@ -11,4 +11,6 @@ import yoshino.models.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findOneByUid(Long uid);
+
+    User findOneByUsername(String username);
 }
