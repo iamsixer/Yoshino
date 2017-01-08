@@ -70,6 +70,18 @@ public class ChannelService {
         return channelRepository.save(channel);
     }
 
+    public Channel updateStatus(String streamKey, String status) {
+        Channel channel = channelRepository.findOneByStreamKey(streamKey);
+        if (channel != null) {
+            if (status.equals("connected"))
+                channel.setStreaming(true);
+            else
+                channel.setStreaming(false);
+            channelRepository.save(channel);
+        }
+        return channel;
+    }
+
     private String createStreamKey(User user) {
         String streamKey;
 

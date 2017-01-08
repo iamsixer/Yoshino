@@ -18,7 +18,14 @@
 <body>
 <div class="box">
     <h4>{{channel.name}}</h4>
-    <video class="player" id="live-player" poster="https://ws4.sinaimg.cn/large/005QOdTPjw1fbjbtyi2pkj315o0ng472.jpg"
+    {{#channel.streaming}}
+        <h6>正在直播</h6>
+    {{/channel.streaming}}
+    {{^channel.streaming}}
+        <h6>尚未直播</h6>
+    {{/channel.streaming}}
+    <video class="player" id="live-player"
+           poster="https://ws4.sinaimg.cn/large/005QOdTPjw1fbjbtyi2pkj315o0ng472.jpg"
            controls></video>
 </div>
 <script src="//cdn.bootcss.com/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
