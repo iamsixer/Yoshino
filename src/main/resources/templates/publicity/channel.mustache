@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{user.username}}</title>
+    <style>
+        .box {
+            width: 60%;
+            display: inline-block;
+            padding: 2%;
+        }
+
+        .player {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h4>{{channel.name}}</h4>
+    <video class="player" id="live-player" poster="https://ws4.sinaimg.cn/large/005QOdTPjw1fbjbtyi2pkj315o0ng472.jpg"
+           controls></video>
+</div>
+<script src="//cdn.bootcss.com/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
+<script src="//cdn.bootcss.com/hls.js/0.6.16/hls.min.js"></script>
+<script src="//cdn.bootcss.com/axios/0.15.3/axios.min.js"></script>
+<script>
+    var Player = function (config) {
+        this.videoElement = config.element
+        this.hlsUrl = config.hlsUrl
+        this.init = function () {
+            var video = this.videoElement
+            if (Hls.isSupported()) {
+                var hls = new Hls();
+                hls.loadSource(this.hlsUrl);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play();
+                });
+            } else {
+                console.log("浏览器不支持 hls.js")
+            }
+        }
+    };
+
+    (function () {
+        axios.get("/api/channels/{{channel.id}}/playurl").then(function (response) {
+            if (response.status == 200) {
+                var data = response.data
+                var player = new Player({
+                    "element": document.getElementById('live-player'),
+                    "hlsUrl": data.HLS
+                })
+                player.init()
+            }
+        }).catch(function (error) {
+            console.log(error)
+        })
+    })();
+</script>
+</body>
+</html>

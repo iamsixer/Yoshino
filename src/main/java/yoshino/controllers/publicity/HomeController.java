@@ -6,11 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import yoshino.errors.PageNotFoundException;
+import yoshino.models.Channel;
 import yoshino.services.ChannelService;
 
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created by Volio on 2016/12/15.
@@ -30,12 +30,17 @@ public class HomeController {
     public String Home(Model model) {
         model.addAttribute("name", "world");
         model.addAttribute("time", new Date());
-        return "home";
+        return "publicity/home";
     }
 
     @GetMapping("/{id}")
-    @ResponseBody
-    public Map<String, String> getChannel(@PathVariable("id") Long id) {
-        return channelService.getPlayUrl(id);
+    public String getChannel(@PathVariable("id") Long id, Model model) {
+        Channel channel = channelService.findOne(id);
+        if (channel == null) {
+            throw new PageNotFoundException();
+        }
+        model.addAttribute("channel", channel);
+        model.addAttribute("user", channel.getUser());
+        return "publicity/channel";
     }
 }

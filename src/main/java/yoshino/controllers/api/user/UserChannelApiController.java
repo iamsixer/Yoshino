@@ -15,12 +15,12 @@ import java.security.Principal;
  */
 @Controller
 @RequestMapping("/api/user/channel")
-public class ChannelApiController {
+public class UserChannelApiController {
 
     private final ChannelService channelService;
 
     @Autowired
-    public ChannelApiController(ChannelService channelService) {
+    public UserChannelApiController(ChannelService channelService) {
         this.channelService = channelService;
     }
 

@@ -30,6 +30,10 @@ public class ChannelService {
         this.streamEngine = streamEngine;
     }
 
+    public Channel findOne(Long id) {
+        return channelRepository.findOne(id);
+    }
+
     public String getPublishUrl(String username) {
         User user = userRepository.findOneByUsername(username);
         if (user.isStreamer()) {
