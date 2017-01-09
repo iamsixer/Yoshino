@@ -108,17 +108,12 @@ ul, li {
     margin-right: 32px;
 }
 
-.main-page-content {
-    margin: 0 auto;
-    padding: 20px 8px;
-}
-
 .channel-list {
     text-align: center;
 }
 
 .live-snapshot {
-    width: 330px;
+    max-width: 330px;
     display: inline-block;
 }
 
