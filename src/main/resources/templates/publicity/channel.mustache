@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>{{user.username}}</title>
+    {{>layout/head}}
     <style>
-        .box {
-            width: 60%;
-            display: inline-block;
-            padding: 2%;
-        }
-
         .player {
             width: 100%;
         }
     </style>
 </head>
 <body>
-<div class="box">
-    <h4>{{channel.name}}</h4>
-    {{#channel.streaming}}
-        <h6>正在直播</h6>
-    {{/channel.streaming}}
-    {{^channel.streaming}}
-        <h6>尚未直播</h6>
-    {{/channel.streaming}}
-    <video class="player" id="live-player"
-           poster="https://ws4.sinaimg.cn/large/005QOdTPjw1fbjbtyi2pkj315o0ng472.jpg"
-           controls></video>
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    {{>layout/header}}
+    {{>layout/nav}}
+    <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-grid channel-content">
+            <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone mdl-card mdl-shadow--2dp">
+                <video class="player" id="live-player"
+                       poster="https://ws4.sinaimg.cn/large/005QOdTPjw1fbkp0j6zy6j30zk0k0dki.jpg"
+                       controls></video>
+                <div class="mdl-card__supporting-text" style="width: auto">
+                    <span class="mdl-color-text--blue-grey-800" style="font-size: 1.5rem">{{channel.name}}</span>
+                    {{#channel.streaming}}
+                        <span class="mdl-color-text--cyan-A400" style="float: right">正在直播</span>
+                    {{/channel.streaming}}
+                    {{^channel.streaming}}
+                        <span class="mdl-color-text--grey" style="float: right">尚未直播</span>
+                    {{/channel.streaming}}
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--2dp">
+
+            </div>
+        </div>
+    </main>
 </div>
-<script src="//cdn.bootcss.com/es6-promise/4.0.5/es6-promise.auto.min.js"></script>
+{{>layout/footer}}
 <script src="//cdn.bootcss.com/hls.js/0.6.16/hls.min.js"></script>
-<script src="//cdn.bootcss.com/axios/0.15.3/axios.min.js"></script>
 <script>
     var Player = function (config) {
         this.videoElement = config.element

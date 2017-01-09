@@ -11,7 +11,6 @@ import yoshino.errors.PageNotFoundException;
 import yoshino.models.Channel;
 import yoshino.services.ChannelService;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +35,7 @@ public class HomeController {
         for (Channel channel : channels) {
             channel.setStreamKey(streamEngine.getSnapshotPlayUrl(channel.getStreamKey()));
         }
+        model.addAttribute("title", "首页");
         model.addAttribute("channels", channels);
         return "publicity/home";
     }
@@ -46,6 +46,7 @@ public class HomeController {
         if (channel == null) {
             throw new PageNotFoundException();
         }
+        model.addAttribute("title", channel.getUser().getUsername());
         model.addAttribute("channel", channel);
         model.addAttribute("user", channel.getUser());
         return "publicity/channel";

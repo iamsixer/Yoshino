@@ -1,4 +1,4 @@
-html, body {
+html, body, h4 {
     font-family: 'Roboto', 'Helvetica', 'Microsoft JhengHei', '微軟正黑體', 'Microsoft YaHei', '微软雅黑', Tahoma, Verdana, sans-serif;
 }
 
@@ -130,4 +130,8 @@ ul, li {
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.5em;
+}
+
+.channel-content{
+    max-width: 1300px;
 }

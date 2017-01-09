@@ -21,8 +21,8 @@ spring:
 security:
   oauth2:
     client:
-      clientId: 868c292b75ea38c794e5ac1f5348d7d1
-      clientSecret: 7fa03341c4012c88f15cb2cf8d6bdec2
+      clientId: e09c0f7aedfade97614675d3060a56d1
+      clientSecret: 434315278685355122bfe4c06e832a1e
       accessTokenUri: https://accounts.niconico.in/oauth/token
       userAuthorizationUri: https://accounts.niconico.in/oauth/authorize
     resource:
