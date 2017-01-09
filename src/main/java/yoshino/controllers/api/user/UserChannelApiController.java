@@ -2,13 +2,13 @@ package yoshino.controllers.api.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import yoshino.models.Channel;
 import yoshino.services.ChannelService;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Volio on 2017/1/7.
@@ -28,5 +28,15 @@ public class UserChannelApiController {
     @ResponseBody
     public Channel createNewChannel(Principal principal) {
         return channelService.createNewChannel(principal.getName());
+    }
+
+    @PutMapping("/title")
+    @ResponseBody
+    public Map<String, Object> updateTitle(@RequestBody Map map, Principal principal) {
+        String title = (String) map.get("title");
+        Map<String, Object> info = new HashMap<>();
+        channelService.updateTitle(principal.getName(), title);
+        info.put("info", "修改成功");
+        return info;
     }
 }

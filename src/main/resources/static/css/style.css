@@ -1,5 +1,5 @@
-html, body, h4 {
-    font-family: 'Roboto', 'Helvetica', 'Microsoft JhengHei', '微軟正黑體', 'Microsoft YaHei', '微软雅黑', Tahoma, Verdana, sans-serif;
+html, body, button, div, h4, input, label, span {
+    font-family: 'Roboto', 'Helvetica', 'Microsoft JhengHei', '微軟正黑體', 'Microsoft YaHei', '微软雅黑', Tahoma, Verdana, sans-serif !important;
 }
 
 a {
@@ -134,4 +134,8 @@ ul, li {
 
 .channel-content{
     max-width: 1300px;
+}
+
+.account-content {
+    max-width: 800px;
 }

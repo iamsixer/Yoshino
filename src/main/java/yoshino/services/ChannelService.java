@@ -35,14 +35,8 @@ public class ChannelService {
         return channelRepository.findOne(id);
     }
 
-    public String getPublishUrl(String username) {
-        User user = userRepository.findOneByUsername(username);
-        if (user.isStreamer()) {
-            Channel channel = channelRepository.findOneByUser(user);
-            return streamEngine.getPublishUrl(channel.getStreamKey());
-        } else {
-            return null;
-        }
+    public Channel findOne(User user) {
+        return channelRepository.findOneByUser(user);
     }
 
     public Map<String, String> getPlayUrl(Long id) {
@@ -85,6 +79,16 @@ public class ChannelService {
 
     public List<Channel> getLivingChannels() {
         return channelRepository.findAllByStreaming(true);
+    }
+
+    public Channel updateTitle(String username, String title) {
+        User user = userRepository.findOneByUsername(username);
+        Channel channel = channelRepository.findOneByUser(user);
+        if (channel != null) {
+            channel.setName(title);
+            channelRepository.save(channel);
+        }
+        return channel;
     }
 
     private String createStreamKey(User user) {

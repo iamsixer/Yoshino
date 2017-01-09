@@ -1,15 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>User</title>
+    {{>layout/head}}
 </head>
 <body>
-{{#publishUrl}}
-    推流地址:{{.}}
-{{/publishUrl}}
-{{^publishUrl}}
-    <a href="/api/user/channel/new">点击</a>创建您的直播频道
-{{/publishUrl}}
+<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
+        <div class="mdl-layout__header-row">
+            <span class="mdl-layout-title">{{title}}</span>
+            <div class="mdl-layout-spacer"></div>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link" href="/logout">登出</a>
+            </nav>
+        </div>
+    </header>
+    {{>layout/nav}}
+    <main class="mdl-layout__content mdl-color--grey-100">
+        <div class="mdl-grid account-content">
+            <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+                <div class="mdl-card__supporting-text">
+                    <span>下面是您的直播信息</span>
+                </div>
+            </div>
+            <input type="hidden" id="csrf-token" name="_csrf" value="{{_csrf.token}}"/>
+            {{#user.streamer}}
+                <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-cell mdl-cell--4-col mdl-cell--12-col-desktop mdl-list">
+                        <div class="mdl-list__item">
+                            <div class="mdl-list__item-primary-content">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"
+                                     style="width:auto">
+                                    <input class="mdl-textfield__input" name="live-title" type="text" id="live-title"
+                                           value="{{channel.name}}">
+                                    <label class="mdl-textfield__label" for="live-title">直播标题...</label>
+                                </div>
+                            </div>
+                            <div class="mdl-list__item-secondary-content">
+                                <button onclick="channel.update()" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--colored">修改
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-card__supporting-text">
+                        <span>推流地址(半小时内有效):</span><br/><br/>
+                        <span class="mdl-list__item-sub-title">{{publishUrl}}</span>
+                    </div>
+                </div>
+            {{/user.streamer}}
+            {{^user.streamer}}
+                <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+                    <div class="mdl-card__supporting-text">
+                        <a href="#" onclick="channel.create()">点击</a><span> 创建您的直播频道</span>
+                    </div>
+                </div>
+            {{/user.streamer}}
+        </div>
+    </main>
+</div>
+{{>layout/footer}}
+<script>
+    var csrfToken = document.getElementById("csrf-token")
+    var channel = {
+        create: function () {
+            axios.post('/api/user/channel/new', null, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": csrfToken.value
+                }
+            }).then(function (response) {
+                if (response.status == 200) {
+                    location.reload()
+                }
+            }).catch(function (error) {
+                notice("参数错误", 10000)
+                console.log(error);
+            });
+        },
+        update: function () {
+            var title = document.getElementById("live-title").value
+            axios.put('/api/user/channel/title', JSON.stringify({
+                "title": title
+            }), {
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": csrfToken.value
+                }
+            }).then(function (response) {
+                notice(response.data.info, 5000)
+            }).catch(function (error) {
+                notice("参数错误，请检查输入", 10000)
+                console.log(error);
+            });
+        }
+    }
+</script>
 </body>
 </html>
