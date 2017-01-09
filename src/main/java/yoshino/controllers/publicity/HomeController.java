@@ -6,11 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import yoshino.engine.StreamEngine;
 import yoshino.errors.PageNotFoundException;
 import yoshino.models.Channel;
 import yoshino.services.ChannelService;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Volio on 2016/12/15.
@@ -20,16 +22,21 @@ import java.util.Date;
 public class HomeController {
 
     private final ChannelService channelService;
+    private final StreamEngine streamEngine;
 
     @Autowired
-    public HomeController(ChannelService channelService) {
+    public HomeController(ChannelService channelService, StreamEngine streamEngine) {
         this.channelService = channelService;
+        this.streamEngine = streamEngine;
     }
 
     @GetMapping
     public String Home(Model model) {
-        model.addAttribute("name", "world");
-        model.addAttribute("time", new Date());
+        List<Channel> channels = channelService.getLivingChannels();
+        for (Channel channel : channels) {
+            channel.setStreamKey(streamEngine.getSnapshotPlayUrl(channel.getStreamKey()));
+        }
+        model.addAttribute("channels", channels);
         return "publicity/home";
     }
 

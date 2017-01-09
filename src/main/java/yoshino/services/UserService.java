@@ -2,6 +2,7 @@ package yoshino.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import yoshino.models.User;
 import yoshino.repositories.UserRepository;
 
 /**
@@ -15,5 +16,9 @@ public class UserService {
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public User getUserInfo(String username) {
+        return userRepository.findOneByUsername(username);
     }
 }

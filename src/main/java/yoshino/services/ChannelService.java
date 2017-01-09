@@ -11,6 +11,7 @@ import yoshino.repositories.UserRepository;
 import yoshino.utils.Encode;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,6 +81,10 @@ public class ChannelService {
             channelRepository.save(channel);
         }
         return channel;
+    }
+
+    public List<Channel> getLivingChannels() {
+        return channelRepository.findAllByStreaming(true);
     }
 
     private String createStreamKey(User user) {
