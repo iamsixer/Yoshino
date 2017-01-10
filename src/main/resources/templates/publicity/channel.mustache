@@ -14,22 +14,21 @@
     {{>layout/nav}}
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid channel-content">
-            <div class="mdl-cell mdl-cell--8-col mdl-cell--4-col-phone mdl-card mdl-shadow--2dp">
-                <video class="player" id="live-player"
-                       poster="https://ws4.sinaimg.cn/large/005QOdTPjw1fbkp0j6zy6j30zk0k0dki.jpg"
-                       controls></video>
-                <div class="mdl-card__supporting-text" style="width: auto">
-                    <span class="mdl-color-text--blue-grey-800" style="font-size: 1.5rem">{{channel.name}}</span>
-                    {{#channel.streaming}}
-                        <span class="mdl-color-text--cyan-A400" style="float: right">正在直播</span>
-                    {{/channel.streaming}}
-                    {{^channel.streaming}}
-                        <span class="mdl-color-text--grey" style="float: right">尚未直播</span>
-                    {{/channel.streaming}}
+            <div class="mdl-cell mdl-cell--11-col mdl-cell--4-col-phone mdl-card mdl-shadow--2dp player-container">
+                <div class="player-content margin-right--large-screen-only">
+                    <video class="player" id="live-player"
+                           poster="https://ws4.sinaimg.cn/large/005QOdTPjw1fbkp0j6zy6j30zk0k0dki.jpg"
+                           controls></video>
+                    <div class="mdl-card__supporting-text" style="width: auto">
+                        <span class="mdl-color-text--blue-grey-800" style="font-size: 1.5rem">{{channel.name}}</span>
+                        {{#channel.streaming}}
+                            <span class="mdl-color-text--cyan-A400" style="float: right">正在直播</span>
+                        {{/channel.streaming}}
+                        {{^channel.streaming}}
+                            <span class="mdl-color-text--grey" style="float: right">尚未直播</span>
+                        {{/channel.streaming}}
+                    </div>
                 </div>
-            </div>
-            <div class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--2dp">
-
             </div>
         </div>
     </main>

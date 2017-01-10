@@ -132,10 +132,18 @@ ul, li {
     line-height: 1.5em;
 }
 
-.channel-content{
-    max-width: 1300px;
+.channel-content .player-container{
+    margin: 8px auto;
 }
 
 .account-content {
-    max-width: 800px;
+    max-width: 900px;
+}
+
+.player-content {
+    margin-right: 300px;
+}
+
+.mdl-layout.is-small-screen .margin-right--large-screen-only {
+    margin-right: auto;
 }
