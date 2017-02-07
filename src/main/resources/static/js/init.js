@@ -7,7 +7,7 @@ var navInit = function (data) {
 }
 
 var danmakuInit = function (data) {
-    if (Danmaku) {
+    if (typeof Danmaku != "undefined") {
         if (data != null)
             window.danmaku = new Danmaku({
                 "id": data.id,
@@ -28,7 +28,9 @@ var danmakuInit = function (data) {
         }
 
         danmaku.onmessage = function (event) {
-            console.log(event.data)
+            if (event.data.errorCode == 0){
+                console.log(event.data)
+            }
         }
 
         danmaku.onclose = function (event) {
