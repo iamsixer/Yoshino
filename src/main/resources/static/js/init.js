@@ -28,7 +28,8 @@ var danmakuInit = function (data) {
         }
 
         danmaku.onmessage = function (event) {
-            if (event.data.errorCode == 0){
+            var data = JSON.parse(event.data)
+            if (data.errorCode == 0){
                 console.log(event.data)
             }
         }
