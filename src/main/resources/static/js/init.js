@@ -8,6 +8,7 @@ var navInit = function (data) {
 
 var danmakuInit = function (data) {
     if (typeof Danmaku != "undefined") {
+        showSystemMsg("正在连接服务器...")
         if (data != null)
             window.danmaku = new Danmaku({
                 "id": data.id,
@@ -24,18 +25,24 @@ var danmakuInit = function (data) {
             })
 
         danmaku.onopen = function (event) {
-            console.log("连接已建立")
+            isConnected = true
+            showSystemMsg("连接服务器成功...")
         }
 
         danmaku.onmessage = function (event) {
             var data = JSON.parse(event.data)
-            if (data.errorCode == 0){
-                console.log(event.data)
+            if (data.errorCode == 0) {
+                var message = data.data
+                showUserMsg(message.username, message.message)
+            }
+            if (data.errorCode == 1001) {
+                showSystemMsg(data.errorMsg)
             }
         }
 
         danmaku.onclose = function (event) {
-            console.log("连接已关闭")
+            isConnected = false
+            showSystemMsg("服务器连接已断开")
         }
 
         danmaku.init()

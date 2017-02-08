@@ -263,10 +263,10 @@ ul, li {
     color: #04c073;
 }
 
-.chat-message-content, .system-message-content {
+.chat-message-content {
     font-size: 14px;
 }
 
-.system-message-name {
+.system-message-name, .system-message-content {
     color: red;
 }
