@@ -29,6 +29,30 @@
                         {{/channel.streaming}}
                     </div>
                 </div>
+                <div class="chat-container mdl-layout--large-screen-only">
+                    <div class="notice-container mdl-color--grey-100">
+                        <div class="notice-content">
+                            <span style="font-weight: 900">直播公告：</span>
+                            <span style="font-size: 12px;">暂无公告</span>
+                        </div>
+                    </div>
+                    <div class="chat-message-container mdl-color--grey-50">
+                        <ul class="chat-messages">
+                            <li class="chat-message-item">
+                                <span class="chat-message-username">用户名:</span>
+                                <span class="chat-message-content">消息内容</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="chat-dispatch mdl-color--grey-200">
+                        <div class="chat-sender">
+                            <div class="chat-input-field">
+                                <textarea class="chat-textarea" placeholder="快来跟大家一起聊天吧~"></textarea>
+                            </div>
+                            <div class="chat-send" id="chat-send-btn">发送</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -37,53 +61,7 @@
 {{>layout/footer}}
 <script src="//cdn.bootcss.com/hls.js/0.6.17/hls.min.js"></script>
 <script src="/js/danmaku.js"></script>
+<script src="/js/channel.js"></script>
 <script src="/js/init.js"></script>
-<script>
-    var videoElement = document.getElementById("live-player")
-    var isIE11 = (/Trident\/7\./).test(navigator.userAgent);
-
-    var Player = function (config) {
-        this.videoElement = config.element
-        this.hlsUrl = config.hlsUrl
-        this.init = function () {
-            var video = this.videoElement
-            if (Hls.isSupported()) {
-                var hls = new Hls();
-                hls.loadSource(this.hlsUrl);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    video.play();
-                });
-            } else {
-                console.log("浏览器不支持 hls.js")
-            }
-        }
-    }
-
-    var resetVideoHeight = function () {
-        var width = videoElement.offsetWidth;
-        videoElement.height = width * 0.5625;
-    };
-
-    (function () {
-        axios.get("/api/channels/" + rid + "/playurl").then(function (response) {
-            if (response.status == 200) {
-                var data = response.data
-                var player = new Player({
-                    "element": document.getElementById('live-player'),
-                    "hlsUrl": data.HLS
-                })
-                player.init()
-            }
-        }).catch(function (error) {
-            console.log(error)
-        })
-        //针对IE11的兼容性写法
-        if (isIE11) {
-            resetVideoHeight()
-            addEventListener('resize', resetVideoHeight);
-        }
-    })();
-</script>
 </body>
 </html>
