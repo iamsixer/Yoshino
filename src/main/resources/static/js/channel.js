@@ -7,6 +7,7 @@ var inputContent = document.getElementById("chat-textarea")
 var chatSendBtn = document.getElementById("chat-send-btn")
 var printWall = document.getElementById("printWall")
 var printScroll = document.getElementById("printScroll")
+var onlineNumber = document.getElementById("online-number")
 var isConnected = false
 
 var bindEvent = function (dom, eventName, fun) {
@@ -67,6 +68,14 @@ var sendMsg = function () {
     } else {
         alert('请输入点文字！');
     }
+}
+
+var refreshOnlineNumber = function () {
+    if (!isConnected) {
+        return
+    }
+
+    onlineNumber.innerHTML = danmaku.number
 }
 
 bindEvent(chatSendBtn, 'click', sendMsg);

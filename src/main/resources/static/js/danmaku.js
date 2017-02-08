@@ -68,23 +68,36 @@ var Base64 = {
 var Danmaku = function (config) {
     var _this = this
     this.q = JSON.stringify(config)
+    this.number = 0
     this.onopen = function (event) {
     }
+    this._onopen = function (event) {
+        _this.onopen(event)
+        _this.refreshOnlineNumber()
+    }
     this.onmessage = function (event) {
+    }
+    this._onmessage = function (event) {
+        var data = JSON.parse(event.data)
+        _this.onmessage(data)
+        if (data.errorCode == 2002) {
+            _this.number = parseInt(data.errorMsg)
+        }
     }
     this.onclose = function (event) {
     }
     this.sendMessage = function (message) {
         _this.socket.send(message)
     }
+    this.refreshOnlineNumber = function () {
+        _this.socket.send("onlineNumber")
+        return this.number
+    }
     this.init = function () {
         _this.socket = new WebSocket(danmakuApiUrl + "?q=" + Base64.encode(this.q))
-        _this.socket.onopen = this.onopen
-        _this.socket.onmessage = this.onmessage
+        _this.socket.onopen = this._onopen
+        _this.socket.onmessage = this._onmessage
         _this.socket.onclose = this.onclose
-        setInterval(_this.sendHeartbeat, 30000)
-    }
-    this.sendHeartbeat = function () {
-        _this.socket.send("heartbeat")
+        setInterval(_this.refreshOnlineNumber, 30000)
     }
 }
