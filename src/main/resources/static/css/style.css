@@ -265,8 +265,13 @@ ul, li {
 
 .chat-message-content {
     font-size: 14px;
+    word-break: break-all;
 }
 
 .system-message-name, .system-message-content {
     color: red;
+}
+
+.system-message-content {
+    word-break: break-all;
 }
