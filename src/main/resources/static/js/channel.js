@@ -43,7 +43,7 @@ var showMessage = function (name, message, system) {
 }
 
 var showUserMsg = function (name, message) {
-    if (String(message).replace(/^\s+/, '').replace(/\s+$/, '')){
+    if (String(message).replace(/^\s+/, '').replace(/\s+$/, '')) {
         showMessage(name, message, false)
     }
 }
@@ -91,7 +91,28 @@ var Player = function (config) {
             hls.loadSource(this.hlsUrl);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                video.play();
+                setTimeout(function () {
+                    video.play();
+                }, 500);
+            });
+            hls.on(Hls.Events.ERROR, function (event, data) {
+                if (data.fatal) {
+                    switch (data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            // try to recover network error
+                            console.log("fatal network error encountered, try to recover");
+                            hls.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            console.log("fatal media error encountered, try to recover");
+                            hls.recoverMediaError();
+                            break;
+                        default:
+                            // cannot recover
+                            hls.destroy();
+                            break;
+                    }
+                }
             });
         } else {
             console.log("浏览器不支持 hls.js")
