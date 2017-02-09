@@ -82,18 +82,19 @@ bindEvent(document.body, 'keydown', function (e) {
 });
 
 var Player = function (config) {
+    var _this = this
     this.videoElement = config.element
     this.hlsUrl = config.hlsUrl
     this.init = function () {
         var video = this.videoElement
         if (Hls.isSupported()) {
             var hls = new Hls();
-            hls.loadSource(this.hlsUrl);
             hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                setTimeout(function () {
+            hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+                hls.loadSource(_this.hlsUrl);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
                     video.play();
-                }, 500);
+                });
             });
             hls.on(Hls.Events.ERROR, function (event, data) {
                 if (data.fatal) {
@@ -125,7 +126,7 @@ var resetVideoHeight = function () {
     videoElement.height = width * 0.5625;
 };
 
-(function () {
+var playerInit = function () {
     axios.get("/api/channels/" + rid + "/playurl").then(function (response) {
         if (response.status == 200) {
             var data = response.data
@@ -143,4 +144,4 @@ var resetVideoHeight = function () {
         resetVideoHeight()
         addEventListener('resize', resetVideoHeight);
     }
-})();
+}

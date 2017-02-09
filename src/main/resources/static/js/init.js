@@ -50,6 +50,12 @@ var danmakuInit = function (data) {
 
         danmaku.init()
     }
+}
+
+window.onload = function () {
+    if (typeof playerInit != "undefined") {
+        playerInit()
+    }
 };
 
 (function () {
@@ -60,4 +66,3 @@ var danmakuInit = function (data) {
         danmakuInit()
     })
 })();
-
