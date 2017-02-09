@@ -9,7 +9,6 @@ var navInit = function (data) {
 var danmakuInit = function (data) {
     if (typeof Danmaku != "undefined") {
         showSystemMsg("正在连接服务器...")
-        setInterval(refreshOnlineNumber, 10000)
         if (data != null)
             window.danmaku = new Danmaku({
                 "id": data.id,
@@ -28,7 +27,6 @@ var danmakuInit = function (data) {
         danmaku.onopen = function (event) {
             isConnected = true
             showSystemMsg("连接服务器成功...")
-            setTimeout(refreshOnlineNumber, 1500)
         }
 
         danmaku.onmessage = function (data) {
@@ -39,6 +37,10 @@ var danmakuInit = function (data) {
             if (data.errorCode == 1001) {
                 showSystemMsg(data.errorMsg)
             }
+        }
+
+        danmaku.onNumberChange = function (number) {
+            updateOnlineNumber(number)
         }
 
         danmaku.onclose = function (event) {

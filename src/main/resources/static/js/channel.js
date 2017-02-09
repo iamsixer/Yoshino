@@ -66,16 +66,12 @@ var sendMsg = function () {
         inputContent.value = ""
         danmaku.sendMessage(value)
     } else {
-        alert('请输入点文字！');
+        showSystemMsg("禁止发送空消息")
     }
 }
 
-var refreshOnlineNumber = function () {
-    if (!isConnected) {
-        return
-    }
-
-    onlineNumber.innerHTML = danmaku.number
+var updateOnlineNumber = function (number) {
+    onlineNumber.innerHTML = number
 }
 
 bindEvent(chatSendBtn, 'click', sendMsg);
