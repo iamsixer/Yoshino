@@ -69,12 +69,11 @@ var Danmaku = function (config) {
     var _this = this
     this.q = JSON.stringify(config)
     this.number = 0
-    this.onopen = function (event) {
-    }
+    this.interval = null
+
     this._onopen = function (event) {
         _this.onopen(event)
-    }
-    this.onmessage = function (event) {
+        _this.interval = setInterval(_this.sendHeartbeat, 30000)
     }
     this._onmessage = function (event) {
         var response = JSON.parse(event.data)
@@ -84,21 +83,28 @@ var Danmaku = function (config) {
             _this.onNumberChange(_this.number)
         }
     }
-    this.onclose = function (event) {
-    }
-    this.onNumberChange = function (number) {
+    this._onclose = function (event) {
+        _this.onclose(event)
+        clearInterval(_this.interval)
     }
     this.sendMessage = function (message) {
         _this.socket.send(message)
     }
     this.init = function () {
-        _this.socket = new WebSocket(danmakuApiUrl + "?q=" + Base64.encode(this.q))
+        _this.socket = new ReconnectingWebSocket(danmakuApiUrl + "?q=" + Base64.encode(this.q))
+        _this.socket.reconnectInterval = 10000
         _this.socket.onopen = this._onopen
         _this.socket.onmessage = this._onmessage
-        _this.socket.onclose = this.onclose
-        setInterval(_this.sendHeartbeat, 30000)
+        _this.socket.onclose = this._onclose
+        _this.socket.onconnecting = this.onconnecting
     }
     this.sendHeartbeat = function () {
         _this.socket.send("heartbeat")
     }
+
+    Danmaku.prototype.onopen = function(event) {};
+    Danmaku.prototype.onmessage = function(event) {};
+    Danmaku.prototype.onclose = function(event) {};
+    Danmaku.prototype.onconnecting = function(event) {};
+    Danmaku.prototype.onNumberChange = function(number) {};
 }

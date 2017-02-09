@@ -8,7 +8,6 @@ var navInit = function (data) {
 
 var danmakuInit = function (data) {
     if (typeof Danmaku != "undefined") {
-        showSystemMsg("正在连接服务器...")
         if (data != null)
             window.danmaku = new Danmaku({
                 "id": data.id,
@@ -23,6 +22,12 @@ var danmakuInit = function (data) {
                 "username": "Visitor",
                 "token": "null"
             })
+
+        danmaku.onconnecting = function (event) {
+            setTimeout(function () {
+                showSystemMsg("正在连接服务器...")
+            }, 500)
+        }
 
         danmaku.onopen = function (event) {
             isConnected = true

@@ -57,9 +57,12 @@
         </div>
     </main>
 </div>
-<script>var rid = {{channel.id}}</script>
+<script>
+    var rid = {{channel.id}}
+</script>
 {{>layout/footer}}
 <script src="//cdn.bootcss.com/hls.js/0.6.17/hls.min.js"></script>
+<script src="//cdn.bootcss.com/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js"></script>
 <script src="/js/danmaku.js"></script>
 <script src="/js/channel.js"></script>
 <script src="/js/init.js"></script>
