@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+  session:
+    timeout: 604800
+    cookie:
+      max-age: 604800
+
 spring:
   mustache:
     suffix: .mustache
